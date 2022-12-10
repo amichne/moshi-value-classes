@@ -1,0 +1,12 @@
+[versions]
+moshi = "1.14.0"
+assertk = "0.25"
+
+[libraries]
+moshi-core = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
+moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
+moshi-adapters = { module = "com.squareup.moshi:moshi-adapters", version.ref = "moshi" }
+assertk = { module = "com.willowtreeapps.assertk:assertk-jvm", version.ref = "assertk"}
+
+[bundles]
+moshi = ["moshi-core", "moshi-kotlin", "moshi-adapters"]
