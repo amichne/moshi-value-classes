@@ -6,6 +6,7 @@ import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.rawType
+import kotlinx.metadata.Flag
 import kotlinx.metadata.KmClassifier
 import kotlinx.metadata.jvm.KotlinClassHeader
 import kotlinx.metadata.jvm.KotlinClassMetadata
@@ -50,7 +51,6 @@ private class ValueClassAdapter<InlineT : Any, ValueT : Any>(
 }
 
 object ValueClassAdapterFactory : JsonAdapter.Factory {
-  @OptIn(ExperimentalUnsignedTypes::class)
   override fun create(
     type: Type,
     annotations: MutableSet<out Annotation>,
@@ -58,8 +58,7 @@ object ValueClassAdapterFactory : JsonAdapter.Factory {
   ): JsonAdapter<Any>? {
     type.rawType.annotations.forEach { annotation ->
       if (annotation is Metadata) {
-//        val y = KotlinClassMetadata.read()
-        val kotlinClassMetadata = KotlinClassMetadata.read(
+        val metadata: KotlinClassMetadata? = KotlinClassMetadata.read(
           KotlinClassHeader(
             annotation.kind,
             annotation.metadataVersion,
@@ -70,27 +69,24 @@ object ValueClassAdapterFactory : JsonAdapter.Factory {
             annotation.extraInt,
           )
         )
-        when (kotlinClassMetadata) {
+        when (metadata) {
           null -> {}
           is KotlinClassMetadata.Class -> {
-            when (val metadata = KotlinClassMetadata.read(kotlinClassMetadata.header)) {
-              is KotlinClassMetadata.Class -> {
-                metadata.toKmClass().properties.forEach { kmProperty ->
-                  when (val propertyClassName = kmProperty.returnType.classifier) {
-                    is KmClassifier.Class -> {
-                      if (propertyClassName.name == "kotlin/UInt") {
-                        println("We need to force the constructor to accept a UInt for ${metadata.toKmClass().name}")
-                      }
-                    }
-                    else -> {
-                      println("I shouldn't ever print")
-                    }
+            metadata.toKmClass().properties.forEach { kmProperty ->
+              when (val returnTypeClassifier = kmProperty.returnType.classifier) {
+                is KmClassifier.Class -> {
+
+                  println("Property name: ${kmProperty.name} Return type: ${returnTypeClassifier.name}")
+                  if (returnTypeClassifier.name == "kotlin/UInt") {
+//                    println("Do I have the 'value' flag? ${Flag.Class.IS_VALUE(kmProperty.flags)}")
+//                      ^- No I won't even due to byte-code changes
+                    println("We need to force the constructor to accept a UInt for ${metadata.toKmClass().name}")
                   }
-                  println("Property: ${kmProperty.name} Field Signature: ${kmProperty}")
                 }
-              }
-              else -> {
-                println("Hmm why am I printing")
+
+                else -> {
+                  println("I shouldn't ever print")
+                }
               }
             }
           }
@@ -99,9 +95,6 @@ object ValueClassAdapterFactory : JsonAdapter.Factory {
             println("No idea why I'm printing either")
           }
         }
-//        if (annotation.data2.contains("Lkotlin/UInt;")) {
-//          println("I can tell that I'm an unsigned integer")
-//        }
       }
       println("Annotation: ${annotation.annotationClass.simpleName}")
     }

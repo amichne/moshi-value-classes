@@ -22,16 +22,21 @@ fun main() {
 //      )
 //    )
   listOf(
-    JvmInlineUInt(value = 15u),
-    DataClassWithUInt(value = 25u)
+    JvmInlineUInt(unsignedValue = 15u),
+    DataClassWithUInt(dataClassUnsignedValue = 25u)
   ).forEach {
-    println("Original Value: \t$it")
     try {
-      println("Plain Moshi: \t\t${plainMoshi.serialize(it)}")
-    } catch (exception: IllegalArgumentException) {
-      println("Plain Moshi: ERROR[IllegalArgumentException]")
+
+      println("Original Value: \t$it")
+      try {
+        println("Plain Moshi: \t\t${plainMoshi.serialize(it)}")
+      } catch (exception: IllegalArgumentException) {
+        println("Plain Moshi: ERROR[IllegalArgumentException]")
+      }
+      println("Value Adapted Moshi: \t${valueAdaptedMoshi.serialize(it)}")
+      println("\n${"-----------------------".repeat(3)}\n")
+    } catch (exception: Exception) {
+      print("")
     }
-    println("Value Adapted Moshi: \t${valueAdaptedMoshi.serialize(it)}")
-    println("\n${"-----------------------".repeat(3)}\n")
   }
 }
