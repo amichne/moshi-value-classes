@@ -10,13 +10,13 @@ value class JvmInlineNullableString(val value: String?)
 
 @JvmInline
 value class JvmInlineString(val value: String) {
-    constructor(
-        baseString: String,
-        appendedString: String,
-    ) : this(baseString + appendedString)
+  constructor(
+    baseString: String,
+    appendedString: String,
+  ) : this(baseString + appendedString)
 
-    val secondValue: Char
-        get() = value.first()
+  val secondValue: Char
+    get() = value.first()
 }
 
 @JvmInline
@@ -27,12 +27,12 @@ value class JvmInlineDouble(val value: Double)
 
 @JvmInline
 value class JvmInlineComplexClass(
-    val value: ExampleNestedClass,
+  val value: ExampleNestedClass,
 ) {
-    data class ExampleNestedClass(
-        val stringValue: String,
-        val intValue: Int,
-    )
+  data class ExampleNestedClass(
+    val stringValue: String,
+    val intValue: Int,
+  )
 }
 
 @JvmInline
@@ -46,10 +46,10 @@ value class JvmInlineMapComplexClass(val parameterizedValue: Map<String, JvmInli
 
 @JvmInline
 value class JvmInlineComplexClassWithParameterizedField(
-    val value: ExampleNestedClassWithParameterizedField,
+  val value: ExampleNestedClassWithParameterizedField,
 ) {
-    data class ExampleNestedClassWithParameterizedField(
-        val strings: List<String>,
-        val ints: List<Int>,
-    )
+  data class ExampleNestedClassWithParameterizedField(
+    val strings: List<String>,
+    val ints: List<Int>,
+  )
 }
