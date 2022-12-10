@@ -14,9 +14,23 @@ fun main() {
     .add(ValueClassAdapterFactory)
     .build()
 
-  jvmInlineValuesList.forEach {
+//  jvmInlineValuesList
+//    .plus(
+//      listOf(
+//        JvmInlineUInt(value = 15u),
+//        DataClassWithUInt(value = 25u)
+//      )
+//    )
+  listOf(
+    JvmInlineUInt(value = 15u),
+    DataClassWithUInt(value = 25u)
+  ).forEach {
     println("Original Value: \t$it")
-    println("Plain Moshi: \t\t${plainMoshi.serialize(it)}")
+    try {
+      println("Plain Moshi: \t\t${plainMoshi.serialize(it)}")
+    } catch (exception: IllegalArgumentException) {
+      println("Plain Moshi: ERROR[IllegalArgumentException]")
+    }
     println("Value Adapted Moshi: \t${valueAdaptedMoshi.serialize(it)}")
     println("\n${"-----------------------".repeat(3)}\n")
   }

@@ -1,4 +1,5 @@
-rootProject.name = "demo"
+rootProject.name = "amichne"
+
 include(
     "adapter"
 )

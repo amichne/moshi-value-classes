@@ -1,10 +1,10 @@
-
 plugins {
-    id("demo.kotlin-library-conventions")
+  id("amichne.kotlin-library-conventions")
 }
 
 dependencies {
-    implementation(libs.bundles.moshi)
-    testImplementation(libs.assertk)
-    testImplementation(kotlin("test"))
+  implementation(libs.bundles.moshi)
+  implementation(libs.kotlin.reflect)
+  testImplementation(libs.assertk)
+  testImplementation(kotlin("test"))
 }

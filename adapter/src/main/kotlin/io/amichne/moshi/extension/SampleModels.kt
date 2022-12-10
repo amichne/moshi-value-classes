@@ -23,6 +23,11 @@ value class JvmInlineString(val value: String) {
 value class JvmInlineInt(val value: Int)
 
 @JvmInline
+value class JvmInlineUInt(val value: UInt)
+
+data class DataClassWithUInt(val value: UInt)
+
+@JvmInline
 value class JvmInlineDouble(val value: Double)
 
 @JvmInline
