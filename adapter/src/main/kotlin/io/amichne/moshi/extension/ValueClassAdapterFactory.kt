@@ -6,11 +6,9 @@ import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.rawType
-import kotlinx.metadata.KmAnnotationArgument
-import kotlinx.metadata.impl.writeAnnotationArgument
+import kotlinx.metadata.KmClassifier
 import kotlinx.metadata.jvm.KotlinClassHeader
 import kotlinx.metadata.jvm.KotlinClassMetadata
-import kotlinx.metadata.jvm.annotations
 import java.lang.reflect.Constructor
 import java.lang.reflect.Type
 import kotlin.reflect.KProperty1
@@ -61,7 +59,7 @@ object ValueClassAdapterFactory : JsonAdapter.Factory {
     type.rawType.annotations.forEach { annotation ->
       if (annotation is Metadata) {
 //        val y = KotlinClassMetadata.read()
-        val x = KotlinClassMetadata.read(
+        val kotlinClassMetadata = KotlinClassMetadata.read(
           KotlinClassHeader(
             annotation.kind,
             annotation.metadataVersion,
@@ -72,33 +70,38 @@ object ValueClassAdapterFactory : JsonAdapter.Factory {
             annotation.extraInt,
           )
         )
-        when (x) {
+        when (kotlinClassMetadata) {
           null -> {}
           is KotlinClassMetadata.Class -> {
-            x.toKmClass().properties.forEach {
-
+            when (val metadata = KotlinClassMetadata.read(kotlinClassMetadata.header)) {
+              is KotlinClassMetadata.Class -> {
+                metadata.toKmClass().properties.forEach { kmProperty ->
+                  when (val propertyClassName = kmProperty.returnType.classifier) {
+                    is KmClassifier.Class -> {
+                      if (propertyClassName.name == "kotlin/UInt") {
+                        println("We need to force the constructor to accept a UInt for ${metadata.toKmClass().name}")
+                      }
+                    }
+                    else -> {
+                      println("I shouldn't ever print")
+                    }
+                  }
+                  println("Property: ${kmProperty.name} Field Signature: ${kmProperty}")
+                }
+              }
+              else -> {
+                println("Hmm why am I printing")
+              }
             }
-//            x.toKmClass().constructors.forEach { kmConstructor ->
-//              kmConstructor.valueParameters.forEach { kmValueParameter ->
-//                kmValueParameter.type.annotations.forEach { kmAnnotation ->
-//                  kmAnnotation.arguments.values.forEach {
-//                    if (it is KmAnnotationArgument.UIntValue) {
-//                      println("My unsigned value: ${it.value}")
-//                    }
-//                  }
-//                }
-//                println("Name: ${kmValueParameter.name} Type: ${kmValueParameter.type.annotations}")
-//
-//              }
-//            }
           }
-          else -> {}
-        }
 
-
-        if (annotation.data2.contains("Lkotlin/UInt;")) {
-          println("I can tell that I'm an unsigned integer")
+          else -> {
+            println("No idea why I'm printing either")
+          }
         }
+//        if (annotation.data2.contains("Lkotlin/UInt;")) {
+//          println("I can tell that I'm an unsigned integer")
+//        }
       }
       println("Annotation: ${annotation.annotationClass.simpleName}")
     }
