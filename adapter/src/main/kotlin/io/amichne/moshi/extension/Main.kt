@@ -13,4 +13,11 @@ fun main() {
     .addLast(KotlinJsonAdapterFactory())
     .add(ValueClassAdapterFactory)
     .build()
+
+  jvmInlineValuesList.forEach {
+    println("Original Value: \t$it")
+    println("Plain Moshi: \t\t${plainMoshi.serialize(it)}")
+    println("Value Adapted Moshi: \t${valueAdaptedMoshi.serialize(it)}")
+    println("\n${"-----------------------".repeat(3)}\n")
+  }
 }
