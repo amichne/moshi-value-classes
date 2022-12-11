@@ -2,42 +2,53 @@
 
 package io.amichne.moshi.extension
 
+import org.intellij.lang.annotations.Language
+
 val jvmInlineString = JvmInlineString("exampleValue")
 val jvmInlineInt = JvmInlineInt(10)
 val jvmInlineDouble = JvmInlineDouble(0.5)
 val exampleNestedClass = JvmInlineComplexClass.ExampleNestedClass(
-    stringValue = "a string",
-    intValue = 10
+  stringValue = "a string",
+  intValue = 10
 )
 val jvmInlineComplexClass = JvmInlineComplexClass(value = exampleNestedClass)
 val jvmInlineListInt = JvmInlineListInt(list = listOf(0, 2, 99))
 val jvmInlineMapStringNullableInt = JvmInlineMapStringNullableInt(mapOf("first" to 1, "missing" to null))
 val jvmInlineMapComplexClass = JvmInlineMapComplexClass(mapOf("key" to jvmInlineComplexClass))
 val exampleNestedClassWithParameterizedField =
-    JvmInlineComplexClassWithParameterizedField.ExampleNestedClassWithParameterizedField(
-        strings = listOf("i", "have", "strings"),
-        ints = listOf(5, 10)
-    )
+  JvmInlineComplexClassWithParameterizedField.ExampleNestedClassWithParameterizedField(
+    strings = listOf("i", "have", "strings"),
+    ints = listOf(5, 10)
+  )
 val jvmInlineComplexClassWithParameterizedField = JvmInlineComplexClassWithParameterizedField(
-    value = exampleNestedClassWithParameterizedField
+  value = exampleNestedClassWithParameterizedField
 )
 
 val jvmInlineStringMultipleConstructorUsage = JvmInlineString("base", "Appended")
 val jvmInlineNotNullNullableString = JvmInlineNullableString("notNull")
 val jvmInlineNullNullableString = JvmInlineNullableString(null)
+val jvmInlineUInt = JvmInlineUInt(unsignedValue = 99u)
+val dataClassWithUInt = DataClassWithUInt(89u)
+val dataClassWithUIntAndString = DataClassWithUIntAndString(stringValue = "foo", unsignedValue = 10u)
 
+@Language("JSON")
 val jvmInlineValuesToStringRepresentation: MutableMap<Any, String> = mutableMapOf(
-    jvmInlineString to """"exampleValue"""",
-    jvmInlineInt to "10",
-    jvmInlineDouble to "0.5",
-    jvmInlineComplexClass to """{"stringValue":"a string","intValue":10}""",
-    jvmInlineListInt to """[0,2,99]""",
-    jvmInlineMapStringNullableInt to """{"first":1,"missing":null}""",
-    jvmInlineMapComplexClass to """{"key":{"stringValue":"a string","intValue":10}}""",
-    jvmInlineStringMultipleConstructorUsage to """"baseAppended"""",
-    jvmInlineNotNullNullableString to """"notNull"""",
-    jvmInlineNullNullableString to """null""",
-    jvmInlineComplexClassWithParameterizedField to """{"strings":["i","have","strings"],"ints":[5, 10]}"""
+  jvmInlineString to """"exampleValue"""",
+  jvmInlineInt to "10",
+  jvmInlineDouble to "0.5",
+  jvmInlineComplexClass to """{"stringValue":"a string","intValue":10}""",
+  jvmInlineListInt to """[0,2,99]""",
+  jvmInlineMapStringNullableInt to """{"first":1,"missing":null}""",
+  jvmInlineMapComplexClass to """{"key":{"stringValue":"a string","intValue":10}}""",
+  jvmInlineStringMultipleConstructorUsage to """"baseAppended"""",
+  jvmInlineNotNullNullableString to """"notNull"""",
+  jvmInlineNullNullableString to """null""",
+  jvmInlineComplexClassWithParameterizedField to """{"strings":["i","have","strings"],"ints":[5, 10]}""",
+  jvmInlineUInt to """${jvmInlineUInt.unsignedValue}""",
+  dataClassWithUInt to """{"uInt": ${dataClassWithUInt.uInt}}""",
+  dataClassWithUIntAndString to
+    """{"stringValue":"${dataClassWithUIntAndString.stringValue}",""" +
+    """"unsignedValue": null}"""
 )
 
 val jvmInlineValuesList = jvmInlineValuesToStringRepresentation.keys.toList()

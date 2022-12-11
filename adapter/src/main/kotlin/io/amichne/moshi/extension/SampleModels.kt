@@ -25,7 +25,15 @@ value class JvmInlineInt(val value: Int)
 @JvmInline
 value class JvmInlineUInt(val unsignedValue: UInt)
 
-data class DataClassWithUInt(val dataClassUnsignedValue: UInt)
+data class DataClassWithUInt(val uInt: UInt)
+data class DataClassWithULong(val uLong: ULong)
+data class DataClassWithUShort(val uShort: UShort)
+data class DataClassWithUByte(val uByte: UByte)
+
+data class DataClassWithUIntAndString(
+  val stringValue: String,
+  val unsignedValue: UInt,
+)
 
 @JvmInline
 value class JvmInlineDouble(val value: Double)
