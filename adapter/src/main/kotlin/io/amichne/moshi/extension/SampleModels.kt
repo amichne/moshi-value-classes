@@ -29,6 +29,7 @@ data class DataClassWithUInt(val uInt: UInt)
 data class DataClassWithULong(val uLong: ULong)
 data class DataClassWithUShort(val uShort: UShort)
 data class DataClassWithUByte(val uByte: UByte)
+data class DataClassWithNullableULong(val nullableULong: ULong?)
 
 data class DataClassWithUIntAndString(
   val stringValue: String,
