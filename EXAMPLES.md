@@ -1,6 +1,9 @@
 <details>
 
-<summary>Example</summary>
+
+<summary>JvmInlineString</summary>
+
+
 JSON Literal:
 
 ```json
@@ -13,22 +16,41 @@ Kotlin Object:
 JvmInlineString(value=exampleValue)
 ```
 
-Base Moshi Result:
+Base Moshi Deserialization Result:
 
 ```
 Expected BEGIN_OBJECT but was STRING at path $
 ```
 
-Updated Moshi:
+Base Moshi Serialization Result:
+
+```json
+{
+  "value": "exampleValue"
+}
+```
+
+Updated Moshi Deserialization Result:
+
+```
+JvmInlineString(value=exampleValue)
+```
+
+Updated Moshi Serialization Result:
 
 ```json
 "exampleValue"
 ```
 
 </details>
+
+
 <details>
 
-<summary>Example</summary>
+
+<summary>JvmInlineInt</summary>
+
+
 JSON Literal:
 
 ```json
@@ -41,22 +63,41 @@ Kotlin Object:
 JvmInlineInt(value=10)
 ```
 
-Base Moshi Result:
+Base Moshi Deserialization Result:
 
 ```
 Expected BEGIN_OBJECT but was NUMBER at path $
 ```
 
-Updated Moshi:
+Base Moshi Serialization Result:
+
+```json
+{
+  "value": 10
+}
+```
+
+Updated Moshi Deserialization Result:
+
+```
+JvmInlineInt(value=10)
+```
+
+Updated Moshi Serialization Result:
 
 ```json
 10
 ```
 
 </details>
+
+
 <details>
 
-<summary>Example</summary>
+
+<summary>JvmInlineDouble</summary>
+
+
 JSON Literal:
 
 ```json
@@ -69,22 +110,41 @@ Kotlin Object:
 JvmInlineDouble(value=0.5)
 ```
 
-Base Moshi Result:
+Base Moshi Deserialization Result:
 
 ```
 Expected BEGIN_OBJECT but was NUMBER at path $
 ```
 
-Updated Moshi:
+Base Moshi Serialization Result:
+
+```json
+{
+  "value": 0.5
+}
+```
+
+Updated Moshi Deserialization Result:
+
+```
+JvmInlineDouble(value=0.5)
+```
+
+Updated Moshi Serialization Result:
 
 ```json
 0.5
 ```
 
 </details>
+
+
 <details>
 
-<summary>Example</summary>
+
+<summary>JvmInlineComplexClass</summary>
+
+
 JSON Literal:
 
 ```json
@@ -100,13 +160,30 @@ Kotlin Object:
 JvmInlineComplexClass(value=ExampleNestedClass(stringValue=a string, intValue=10))
 ```
 
-Base Moshi Result:
+Base Moshi Deserialization Result:
 
 ```
 Required value 'value' missing at $
 ```
 
-Updated Moshi:
+Base Moshi Serialization Result:
+
+```json
+{
+  "value": {
+    "stringValue": "a string",
+    "intValue": 10
+  }
+}
+```
+
+Updated Moshi Deserialization Result:
+
+```
+JvmInlineComplexClass(value=ExampleNestedClass(stringValue=a string, intValue=10))
+```
+
+Updated Moshi Serialization Result:
 
 ```json
 {
@@ -116,13 +193,22 @@ Updated Moshi:
 ```
 
 </details>
+
+
 <details>
 
-<summary>Example</summary>
+
+<summary>JvmInlineListInt</summary>
+
+
 JSON Literal:
 
 ```json
-`[0, 2, 99]
+[
+  0,
+  2,
+  99
+]
 ```
 
 Kotlin Object:
@@ -131,13 +217,31 @@ Kotlin Object:
 JvmInlineListInt(list=[0, 2, 99])
 ```
 
-Base Moshi Result:
+Base Moshi Deserialization Result:
 
 ```
 Expected BEGIN_OBJECT but was BEGIN_ARRAY at path $
 ```
 
-Updated Moshi:
+Base Moshi Serialization Result:
+
+```json
+{
+  "list": [
+    0,
+    2,
+    99
+  ]
+}
+```
+
+Updated Moshi Deserialization Result:
+
+```
+JvmInlineListInt(list=[0, 2, 99])
+```
+
+Updated Moshi Serialization Result:
 
 ```json
 [
@@ -148,9 +252,14 @@ Updated Moshi:
 ```
 
 </details>
+
+
 <details>
 
-<summary>Example</summary>
+
+<summary>JvmInlineMapStringNullableInt</summary>
+
+
 JSON Literal:
 
 ```json
@@ -166,13 +275,29 @@ Kotlin Object:
 JvmInlineMapStringNullableInt(map={first=1, missing=null})
 ```
 
-Base Moshi Result:
+Base Moshi Deserialization Result:
 
 ```
 Required value 'map' missing at $
 ```
 
-Updated Moshi:
+Base Moshi Serialization Result:
+
+```json
+{
+  "map": {
+    "first": 1
+  }
+}
+```
+
+Updated Moshi Deserialization Result:
+
+```
+JvmInlineMapStringNullableInt(map={first=1, missing=null})
+```
+
+Updated Moshi Serialization Result:
 
 ```json
 {
@@ -181,9 +306,14 @@ Updated Moshi:
 ```
 
 </details>
+
+
 <details>
 
-<summary>Example</summary>
+
+<summary>JvmInlineMapComplexClass</summary>
+
+
 JSON Literal:
 
 ```json
@@ -201,13 +331,34 @@ Kotlin Object:
 JvmInlineMapComplexClass(parameterizedValue={key=JvmInlineComplexClass(value=ExampleNestedClass(stringValue=a string, intValue=10))})
 ```
 
-Base Moshi Result:
+Base Moshi Deserialization Result:
 
 ```
 Required value 'parameterizedValue' missing at $
 ```
 
-Updated Moshi:
+Base Moshi Serialization Result:
+
+```json
+{
+  "parameterizedValue": {
+    "key": {
+      "value": {
+        "stringValue": "a string",
+        "intValue": 10
+      }
+    }
+  }
+}
+```
+
+Updated Moshi Deserialization Result:
+
+```
+JvmInlineMapComplexClass(parameterizedValue={key=JvmInlineComplexClass(value=ExampleNestedClass(stringValue=a string, intValue=10))})
+```
+
+Updated Moshi Serialization Result:
 
 ```json
 {
@@ -219,9 +370,14 @@ Updated Moshi:
 ```
 
 </details>
+
+
 <details>
 
-<summary>Example</summary>
+
+<summary>JvmInlineString</summary>
+
+
 JSON Literal:
 
 ```json
@@ -234,22 +390,41 @@ Kotlin Object:
 JvmInlineString(value=baseAppended)
 ```
 
-Base Moshi Result:
+Base Moshi Deserialization Result:
 
 ```
 Expected BEGIN_OBJECT but was STRING at path $
 ```
 
-Updated Moshi:
+Base Moshi Serialization Result:
+
+```json
+{
+  "value": "baseAppended"
+}
+```
+
+Updated Moshi Deserialization Result:
+
+```
+JvmInlineString(value=baseAppended)
+```
+
+Updated Moshi Serialization Result:
 
 ```json
 "baseAppended"
 ```
 
 </details>
+
+
 <details>
 
-<summary>Example</summary>
+
+<summary>JvmInlineNullableString</summary>
+
+
 JSON Literal:
 
 ```json
@@ -262,22 +437,41 @@ Kotlin Object:
 JvmInlineNullableString(value=notNull)
 ```
 
-Base Moshi Result:
+Base Moshi Deserialization Result:
 
 ```
 Expected BEGIN_OBJECT but was STRING at path $
 ```
 
-Updated Moshi:
+Base Moshi Serialization Result:
+
+```json
+{
+  "value": "notNull"
+}
+```
+
+Updated Moshi Deserialization Result:
+
+```
+JvmInlineNullableString(value=notNull)
+```
+
+Updated Moshi Serialization Result:
 
 ```json
 "notNull"
 ```
 
 </details>
+
+
 <details>
 
-<summary>Example</summary>
+
+<summary>JvmInlineNullableString</summary>
+
+
 JSON Literal:
 
 ```json
@@ -290,22 +484,39 @@ Kotlin Object:
 JvmInlineNullableString(value=null)
 ```
 
-Base Moshi Result:
+Base Moshi Deserialization Result:
 
 ```
 null
 ```
 
-Updated Moshi:
+Base Moshi Serialization Result:
+
+```json
+{}
+```
+
+Updated Moshi Deserialization Result:
+
+```
+JvmInlineNullableString(value=null)
+```
+
+Updated Moshi Serialization Result:
 
 ```json
 null
 ```
 
 </details>
+
+
 <details>
 
-<summary>Example</summary>
+
+<summary>JvmInlineComplexClassWithParameterizedField</summary>
+
+
 JSON Literal:
 
 ```json
@@ -328,13 +539,37 @@ Kotlin Object:
 JvmInlineComplexClassWithParameterizedField(value=ExampleNestedClassWithParameterizedField(strings=[i, have, strings], ints=[5, 10]))
 ```
 
-Base Moshi Result:
+Base Moshi Deserialization Result:
 
 ```
 Required value 'value' missing at $
 ```
 
-Updated Moshi:
+Base Moshi Serialization Result:
+
+```json
+{
+  "value": {
+    "strings": [
+      "i",
+      "have",
+      "strings"
+    ],
+    "ints": [
+      5,
+      10
+    ]
+  }
+}
+```
+
+Updated Moshi Deserialization Result:
+
+```
+JvmInlineComplexClassWithParameterizedField(value=ExampleNestedClassWithParameterizedField(strings=[i, have, strings], ints=[5, 10]))
+```
+
+Updated Moshi Serialization Result:
 
 ```json
 {
@@ -351,9 +586,14 @@ Updated Moshi:
 ```
 
 </details>
+
+
 <details>
 
-<summary>Example</summary>
+
+<summary>JvmInlineUInt</summary>
+
+
 JSON Literal:
 
 ```json
@@ -366,118 +606,186 @@ Kotlin Object:
 JvmInlineUInt(unsignedValue=99)
 ```
 
-Base Moshi Result:
+Base Moshi Deserialization Result:
 
 ```
 Platform class kotlin.UInt requires explicit JsonAdapter to be registered for class kotlin.UInt unsignedValue for class io.amichne.moshi.extension.JvmInlineUInt
 ```
 
-Updated Moshi:
+Base Moshi Serialization Result:
+
+```json
+Platform class kotlin.UInt requires explicit JsonAdapter to be registered for class kotlin.UInt unsignedValue for class io.amichne.moshi.extension.JvmInlineUInt
+```
+
+Updated Moshi Deserialization Result:
+
+```
+JvmInlineUInt(unsignedValue=99)
+```
+
+Updated Moshi Serialization Result:
 
 ```json
 99
 ```
 
 </details>
+
+
 <details>
 
-<summary>Example</summary>
+
+<summary>DataClassWithULong</summary>
+
+
 JSON Literal:
 
 ```json
 {
-  "uInt": 89
+  "uLong": 9223372039002259454
 }
 ```
 
 Kotlin Object:
 
 ```
-DataClassWithUInt(uInt=89)
+DataClassWithULong(uLong=9223372039002259454)
 ```
 
-Base Moshi Result:
-
-```
-Platform class kotlin.UInt requires explicit JsonAdapter to be registered for class kotlin.UInt uInt for class io.amichne.moshi.extension.DataClassWithUInt
-```
-
-Updated Moshi:
-
-```json
-{
-  "uInt": 89
-}
-```
-
-</details>
-<details>
-
-<summary>Example</summary>
-JSON Literal:
-
-```json
-{
-  "uLong": 2147516414
-}
-```
-
-Kotlin Object:
-
-```
-DataClassWithULong(uLong=2147516414)
-```
-
-Base Moshi Result:
+Base Moshi Deserialization Result:
 
 ```
 Platform class kotlin.ULong requires explicit JsonAdapter to be registered for class kotlin.ULong uLong for class io.amichne.moshi.extension.DataClassWithULong
 ```
 
-Updated Moshi:
+Base Moshi Serialization Result:
+
+```json
+Platform class kotlin.ULong requires explicit JsonAdapter to be registered for class kotlin.ULong uLong for class io.amichne.moshi.extension.DataClassWithULong
+```
+
+Updated Moshi Deserialization Result:
+
+```
+DataClassWithULong(uLong=9223372039002259454)
+```
+
+Updated Moshi Serialization Result:
 
 ```json
 {
-  "uLong": 2147516414
+  "uLong": 9223372039002259454
 }
 ```
 
 </details>
+
+
 <details>
 
-<summary>Example</summary>
+
+<summary>DataClassWithUInt</summary>
+
+
 JSON Literal:
 
 ```json
 {
-  "uShort": 13
+  "uInt": 2147516414
 }
 ```
 
 Kotlin Object:
 
 ```
-DataClassWithUShort(uShort=13)
+DataClassWithUInt(uInt=2147516414)
 ```
 
-Base Moshi Result:
+Base Moshi Deserialization Result:
+
+```
+Platform class kotlin.UInt requires explicit JsonAdapter to be registered for class kotlin.UInt uInt for class io.amichne.moshi.extension.DataClassWithUInt
+```
+
+Base Moshi Serialization Result:
+
+```json
+Platform class kotlin.UInt requires explicit JsonAdapter to be registered for class kotlin.UInt uInt for class io.amichne.moshi.extension.DataClassWithUInt
+```
+
+Updated Moshi Deserialization Result:
+
+```
+DataClassWithUInt(uInt=2147516414)
+```
+
+Updated Moshi Serialization Result:
+
+```json
+{
+  "uInt": 2147516414
+}
+```
+
+</details>
+
+
+<details>
+
+
+<summary>DataClassWithUShort</summary>
+
+
+JSON Literal:
+
+```json
+{
+  "uShort": 32894
+}
+```
+
+Kotlin Object:
+
+```
+DataClassWithUShort(uShort=32894)
+```
+
+Base Moshi Deserialization Result:
 
 ```
 Platform class kotlin.UShort requires explicit JsonAdapter to be registered for class kotlin.UShort uShort for class io.amichne.moshi.extension.DataClassWithUShort
 ```
 
-Updated Moshi:
+Base Moshi Serialization Result:
+
+```json
+Platform class kotlin.UShort requires explicit JsonAdapter to be registered for class kotlin.UShort uShort for class io.amichne.moshi.extension.DataClassWithUShort
+```
+
+Updated Moshi Deserialization Result:
+
+```
+DataClassWithUShort(uShort=32894)
+```
+
+Updated Moshi Serialization Result:
 
 ```json
 {
-  "uShort": 13
+  "uShort": 32894
 }
 ```
 
 </details>
+
+
 <details>
 
-<summary>Example</summary>
+
+<summary>DataClassWithUByte</summary>
+
+
 JSON Literal:
 
 ```json
@@ -492,13 +800,25 @@ Kotlin Object:
 DataClassWithUByte(uByte=137)
 ```
 
-Base Moshi Result:
+Base Moshi Deserialization Result:
 
 ```
 Platform class kotlin.UByte requires explicit JsonAdapter to be registered for class kotlin.UByte uByte for class io.amichne.moshi.extension.DataClassWithUByte
 ```
 
-Updated Moshi:
+Base Moshi Serialization Result:
+
+```json
+Platform class kotlin.UByte requires explicit JsonAdapter to be registered for class kotlin.UByte uByte for class io.amichne.moshi.extension.DataClassWithUByte
+```
+
+Updated Moshi Deserialization Result:
+
+```
+DataClassWithUByte(uByte=137)
+```
+
+Updated Moshi Serialization Result:
 
 ```json
 {
@@ -507,35 +827,54 @@ Updated Moshi:
 ```
 
 </details>
+
+
 <details>
 
-<summary>Example</summary>
+
+<summary>DataClassWithUIntAndString</summary>
+
+
 JSON Literal:
 
 ```json
 {
   "stringValue": "foo",
-  "unsignedValue": 10
+  "unsignedValue": 2147516414
 }
 ```
 
 Kotlin Object:
 
 ```
-DataClassWithUIntAndString(stringValue=foo, unsignedValue=10)
+DataClassWithUIntAndString(stringValue=foo, unsignedValue=2147516414)
 ```
 
-Base Moshi Result:
+Base Moshi Deserialization Result:
 
 ```
 Platform class kotlin.UInt requires explicit JsonAdapter to be registered for class kotlin.UInt unsignedValue for class io.amichne.moshi.extension.DataClassWithUIntAndString
 ```
 
-Updated Moshi:
+Base Moshi Serialization Result:
+
+```json
+Platform class kotlin.UInt requires explicit JsonAdapter to be registered for class kotlin.UInt unsignedValue for class io.amichne.moshi.extension.DataClassWithUIntAndString
+```
+
+Updated Moshi Deserialization Result:
+
+```
+DataClassWithUIntAndString(stringValue=foo, unsignedValue=2147516414)
+```
+
+Updated Moshi Serialization Result:
 
 ```json
 {
   "stringValue": "foo",
-  "unsignedValue": 10
+  "unsignedValue": 2147516414
 }
 ```
+
+</details>

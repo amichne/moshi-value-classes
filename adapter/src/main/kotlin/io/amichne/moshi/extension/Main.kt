@@ -18,23 +18,28 @@ private val custom: Moshi = Moshi.Builder()
   .addLast(KotlinJsonAdapterFactory())
   .build()
 
-private fun Map<Any, String>.compareSerialization() {
+private fun Map<Any, String>.buildExamplesMd() {
   forEach {
-    println("Input JSON: \t\t${it.value}")
-    println("Original Value: \t${it.key}")
+    println("<details>\n\n")
+    println("<summary>${it.key.javaClass.simpleName}</summary>\n\n")
+    println("JSON Literal:\n```json\n${it.value}\n```\n\n")
+    println("Kotlin Object:\n```\n${it.key}\n```\n\n")
     try {
-      println("Plain Moshi: \t\t${base.serialize(base.deserialize(it.value, it.key.javaClass))}")
+      println("Base Moshi Deserialization Result:\n```\n${base.deserialize(it.value, it.key.javaClass)}\n```\n\n")
     } catch (exception: Exception) {
-      println("Plain Moshi: \t\t[${exception.message?.replace('\n', ' ')}]")
+      println("Base Moshi Deserialization Result:\n```\n${exception.message?.replace('\n', ' ')}\n```\n\n")
     }
-    println(
-      "Value Adapted Moshi: \t" +
-      custom.serialize(custom.deserialize(it.value, it.key.javaClass))
-    )
-    println("\n${"-----------------------".repeat(3)}\n")
+    try {
+      println("Base Moshi Serialization Result:\n```json\n${base.serialize(it.key)}\n```\n\n")
+    } catch (exception: Exception) {
+      println("Base Moshi Serialization Result:\n```json\n${exception.message?.replace('\n', ' ')}\n```\n\n")
+    }
+    println("Updated Moshi Deserialization Result:\n```\n${custom.deserialize(it.value, it.key.javaClass)}\n```\n\n")
+    println("Updated Moshi Serialization Result:\n```json\n${custom.serialize(it.key)}\n```\n\n")
+    println("</details>\n\n")
   }
 }
 
 fun main() {
-  instanceToJsonStringMap.compareSerialization()
+  instanceToJsonStringMap.buildExamplesMd()
 }
