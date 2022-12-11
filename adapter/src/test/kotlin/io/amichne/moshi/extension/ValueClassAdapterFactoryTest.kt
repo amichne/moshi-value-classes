@@ -23,6 +23,7 @@ import kotlin.test.assertNull
 
 private val moshi: Moshi = Moshi.Builder()
   .add(ValueClassAdapterFactory)
+  .add(UnsignedAdapterFactory)
   .addLast(KotlinJsonAdapterFactory())
   .build()
 
@@ -36,7 +37,7 @@ private inline fun <reified K, reified V> Moshi.mapAdapter(
 @Suppress("MaxLineLength")
 internal class ValueClassAdapterFactoryTest {
   fun assertSerializedDeserialized(original: Any) =
-    when (val stringRepresentation = jvmInlineValuesToStringRepresentation[original]) {
+    when (val stringRepresentation = instanceToJsonStringMap[original]) {
       null -> fail("Missing string representation of $original")
       else -> {
         val actual = moshi.adapter(original::class.java).fromJson(stringRepresentation)!!
@@ -54,15 +55,7 @@ internal class ValueClassAdapterFactoryTest {
   @TestInstance(PER_CLASS)
   inner class JsonTypeConversionTests {
     @Suppress("unused")
-    private fun inlineInstances(): Stream<Arguments> = Stream.of(
-      Arguments.of(jvmInlineString),
-      Arguments.of(jvmInlineInt),
-      Arguments.of(jvmInlineDouble),
-      Arguments.of(jvmInlineComplexClass),
-      Arguments.of(jvmInlineListInt),
-      Arguments.of(jvmInlineMapStringNullableInt),
-      Arguments.of(jvmInlineMapComplexClass),
-    )
+    private fun inlineInstances(): Stream<Arguments> = instanceToJsonStringMap.keys.map { Arguments.of(it) }.stream()
 
     @ParameterizedTest
     @MethodSource("inlineInstances")
@@ -73,7 +66,7 @@ internal class ValueClassAdapterFactoryTest {
       if (value is JvmInlineMapStringNullableInt) {
         assertThat(moshi.serialize(value)).isEqualTo("""{"first":1}""")
       } else {
-        assertThat(moshi.serialize(value)).isEqualTo(jvmInlineValuesToStringRepresentation[value])
+        assertThat(moshi.serialize(value)).isEqualTo(instanceToJsonStringMap[value])
       }
     }
 

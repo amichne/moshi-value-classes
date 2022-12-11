@@ -36,5 +36,5 @@ private fun Map<Any, String>.compareSerialization() {
 }
 
 fun main() {
-  jvmInlineValuesToStringRepresentation.compareSerialization()
+  instanceToJsonStringMap.compareSerialization()
 }

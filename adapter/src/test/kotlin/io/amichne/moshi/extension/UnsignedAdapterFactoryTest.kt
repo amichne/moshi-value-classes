@@ -32,15 +32,15 @@ private val dataClassWithUByte = DataClassWithUByte((Byte.MAX_VALUE.toUByte() + 
 
 @Language("JSON")
 private val unsignedToStringRepresentation: Map<Any, String> = mapOf(
-  dataClassWithULong to """{"uLong": ${dataClassWithULong.uLong}}""", // uLong=9223372039002259454
-  dataClassWithUInt to """{"uInt": ${dataClassWithUInt.uInt}}""", // uInt=2147516414
-  dataClassWithUShort to """{"uShort": ${dataClassWithUShort.uShort}}""", // uShort=32894
-  dataClassWithUByte to """{"uByte": ${dataClassWithUByte.uByte}}""", // uByte=137
+  dataClassWithULong to """{"uLong":${dataClassWithULong.uLong}}""", // uLong=9223372039002259454
+  dataClassWithUInt to """{"uInt":${dataClassWithUInt.uInt}}""", // uInt=2147516414
+  dataClassWithUShort to """{"uShort":${dataClassWithUShort.uShort}}""", // uShort=32894
+  dataClassWithUByte to """{"uByte":${dataClassWithUByte.uByte}}""", // uByte=137
 )
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UnsignedAdapterFactoryTest {
-  fun assertSerializedDeserialized(original: Any) =
+  private fun assertSerializedDeserialized(original: Any) =
     when (val stringRepresentation = unsignedToStringRepresentation[original]) {
       null -> fail("Missing string representation of $original")
       else -> {
