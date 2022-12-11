@@ -7,6 +7,196 @@ This is presented as a solution to both aspects of the issue.
 
 See the below examples for reference on the current moshi behavior and the behavior after the addition of the proposed adapter factories.
 
+## Highlights
+
+<details>
+<summary style="font-size: 20px;">Unsigned Long with value greater than Long.MAX_VALUE is now parse-able</summary>
+
+JSON Literal:
+
+```json
+{
+  "uLong": 9223372039002259454
+}
+```
+
+Kotlin Object:
+
+```kotlin
+DataClassWithULong(
+    uLong = 9223372039002259454u
+)
+```
+
+Base Moshi Deserialization Result:
+
+```
+Platform class kotlin.ULong requires explicit JsonAdapter to be registered for class kotlin.ULong
+```
+
+Base Moshi Serialization Result:
+
+```
+Platform class kotlin.ULong requires explicit JsonAdapter to be registered for class kotlin.ULong
+```
+
+Updated Moshi Deserialization Result:
+
+```kotlin
+DataClassWithULong(
+    uLong = 9223372039002259454u
+)
+```
+
+Updated Moshi Serialization Result:
+
+```json
+{
+  "uLong": 9223372039002259454
+}
+```
+
+</details>
+
+<br>
+
+<details>
+
+<summary style="font-size: 20px;">Value class with an integer property is serialized and deserialized</summary>
+
+JSON Literal:
+
+```json
+10
+```
+
+Kotlin Object:
+
+```kotlin
+JvmInlineInt(
+  value = 10
+)
+```
+
+Base Moshi Deserialization Result:
+
+```
+Expected BEGIN_OBJECT but was NUMBER at path $
+```
+
+Base Moshi Serialization Result:
+
+```json
+{
+  "value": 10
+}
+```
+
+Updated Moshi Deserialization Result:
+
+```kotlin
+JvmInlineInt(
+    value = 10
+)
+```
+
+Updated Moshi Serialization Result:
+
+```json
+10
+```
+
+</details>
+
+<br>
+
+
+<details>
+
+<summary style="font-size: 20px;">Value class with a property that is a parameterized type is not subject to type erasure</summary>
+
+JSON Literal:
+
+```json
+{
+  "strings": [
+    "i",
+    "have",
+    "strings"
+  ],
+  "ints": [
+    5,
+    10
+  ]
+}
+```
+
+Kotlin Object:
+
+```kotlin
+JvmInlineComplexClassWithParameterizedField(
+    value = ExampleNestedClassWithParameterizedField(
+        strings = listOf("i", "have", "strings"),
+        ints = listOf(5, 10)
+    )
+)
+```
+
+Base Moshi Deserialization Result:
+
+```
+Required value 'value' missing at $
+```
+
+Base Moshi Serialization Result:
+
+```json
+{
+  "value": {
+    "strings": [
+      "i",
+      "have",
+      "strings"
+    ],
+    "ints": [
+      5,
+      10
+    ]
+  }
+}
+```
+
+Updated Moshi Deserialization Result:
+
+```kotlin
+JvmInlineComplexClassWithParameterizedField(
+    value = ExampleNestedClassWithParameterizedField(
+        strings = listOf("i", "have", "strings"),
+        ints = listOf(5, 10)
+    )
+)
+```
+
+Updated Moshi Serialization Result:
+
+```json
+{
+  "strings": [
+    "i",
+    "have",
+    "strings"
+  ],
+  "ints": [
+    5,
+    10
+  ]
+}
+```
+
+</details>
+
+## All tested scenarios
+
 <details>
 
 <summary>JvmInlineString</summary>
