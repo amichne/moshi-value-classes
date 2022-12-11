@@ -10,7 +10,7 @@ import com.squareup.moshi.rawType
 import java.lang.reflect.Type
 
 private class UnsignedTypeAdapter<UnsignedT>(
-  private val numberAdapter: NumberAdapter<UnsignedT>,
+  private val toUnsignedT: ULong.() -> UnsignedT,
 ) : JsonAdapter<UnsignedT>() {
   override fun toJson(writer: JsonWriter, value: UnsignedT?) {
     when (value) {
@@ -23,41 +23,35 @@ private class UnsignedTypeAdapter<UnsignedT>(
     Token.NUMBER -> {
       val stringOfNumber = reader.nextString()
       if (stringOfNumber.startsWith('-')) {
-        error("negative value")
+        throw JsonDataException(
+          "Expected an unsigned number but got $stringOfNumber, " +
+          "a signed number, at path ${reader.path}",
+          IllegalArgumentException(stringOfNumber)
+        )
       }
-      numberAdapter.unsignedParser(stringOfNumber.toULong())
+      stringOfNumber.toULong().toUnsignedT()
     }
 
     else -> throw JsonDataException(
-      "Expected an unsigned number but was ${reader.readJsonValue()}, " +
-      "a $next, at path ${reader.path}"
+      "Expected an unsigned number but was ${reader.peekJson().readJsonValue()}, " +
+      "a $next, at path ${reader.path}",
+      IllegalArgumentException(next.name)
     )
   }
 }
 
-private class NumberAdapter<UnsignedT> private constructor(
-  val unsignedParser: ULong.() -> UnsignedT,
-) {
-  companion object {
-    val Int = NumberAdapter { toUInt() }
-    val Long = NumberAdapter { toULong() }
-    val Short = NumberAdapter { toUShort() }
-    val Byte = NumberAdapter { toUByte() }
-  }
-}
-
 object UnsignedAdapterFactory : JsonAdapter.Factory {
-  private val unsignedTypesMapperMap: Map<Class<*>, NumberAdapter<*>> = mapOf(
-    ULong::class.java to NumberAdapter.Long,
-    UInt::class.java to NumberAdapter.Int,
-    UShort::class.java to NumberAdapter.Short,
-    UByte::class.java to NumberAdapter.Byte
+  private val unsignedTypesMapperMap: Map<Class<*>, ULong.() -> Any> = mapOf(
+    ULong::class.java to { toULong() },
+    UInt::class.java to { toUInt() },
+    UShort::class.java to { toUShort() },
+    UByte::class.java to { toUByte() }
   )
 
   private val Type.isUnsignedType: Boolean
     get() = unsignedTypesMapperMap.keys.any { it.isAssignableFrom(rawType) }
 
-  private val Type.mapper: NumberAdapter<*>
+  private val Type.mapper: ULong.() -> Any
     get() = unsignedTypesMapperMap[rawType]!!
 
   override fun create(
