@@ -38,34 +38,34 @@ private class UnsignedTypeAdapter<UnsignedT, SignedT>(
   }
 }
 
-  private class TypeMapper<UnsignedT, SignedT> private constructor(
-    val unsignedToSigned: UnsignedT.() -> SignedT,
-    val signedToUnsigned: Long.() -> UnsignedT,
-  ) {
-    companion object {
-      val Integer = TypeMapper({ toInt() }, { toUInt() })
-      val Long = TypeMapper({ toLong() }, { toULong() })
-      val Short = TypeMapper({ toShort() }, { toUShort() })
-      val Byte = TypeMapper({ toByte() }, { toUByte() })
-    }
+private class TypeMapper<UnsignedT, SignedT> private constructor(
+  val unsignedToSigned: UnsignedT.() -> SignedT,
+  val signedToUnsigned: Long.() -> UnsignedT,
+) {
+  companion object {
+    val Integer = TypeMapper({ toInt() }, { toUInt() })
+    val Long = TypeMapper({ toLong() }, { toULong() })
+    val Short = TypeMapper({ toShort() }, { toUShort() })
+    val Byte = TypeMapper({ toByte() }, { toUByte() })
   }
+}
 
-  object UnsignedAdapterFactory : JsonAdapter.Factory {
-    private val typeMapperMap: Map<Class<*>, TypeMapper<*, *>> = mapOf(
-      ULong::class.java to TypeMapper.Long,
-      UInt::class.java to TypeMapper.Integer,
-      UShort::class.java to TypeMapper.Short,
-      UByte::class.java to TypeMapper.Byte
-    )
+object UnsignedAdapterFactory : JsonAdapter.Factory {
+  private val typeMapperMap: Map<Class<*>, TypeMapper<*, *>> = mapOf(
+    ULong::class.java to TypeMapper.Long,
+    UInt::class.java to TypeMapper.Integer,
+    UShort::class.java to TypeMapper.Short,
+    UByte::class.java to TypeMapper.Byte
+  )
 
-    val Type.isUnsignedType: Boolean
-      get() = typeMapperMap.keys.any { it.isAssignableFrom(rawType) }
+  val Type.isUnsignedType: Boolean
+    get() = typeMapperMap.keys.any { it.isAssignableFrom(rawType) }
 
-    override fun create(
-      type: Type,
-      annotations: MutableSet<out Annotation>,
-      moshi: Moshi,
-    ): JsonAdapter<*>? = if (type.isUnsignedType) {
-      UnsignedTypeAdapter(typeMapperMap[type.rawType]!!)
-    } else null
-  }
+  override fun create(
+    type: Type,
+    annotations: MutableSet<out Annotation>,
+    moshi: Moshi,
+  ): JsonAdapter<*>? = if (type.isUnsignedType) {
+    UnsignedTypeAdapter(typeMapperMap[type.rawType]!!)
+  } else null
+}

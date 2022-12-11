@@ -9,10 +9,10 @@ private inline fun <reified T> Moshi.serialize(value: T): String = adapter(T::cl
 
 private fun <T : Any> Moshi.deserialize(value: String, type: Class<T>): T = adapter(type).fromJson(value)!!
 
-private val plainMoshi: Moshi = Moshi.Builder()
+private val base: Moshi = Moshi.Builder()
   .addLast(KotlinJsonAdapterFactory())
   .build()
-private val valueAdaptedMoshi: Moshi = Moshi.Builder()
+private val custom: Moshi = Moshi.Builder()
   .addLast(KotlinJsonAdapterFactory())
   .add(ValueClassAdapterFactory)
   .add(UnsignedAdapterFactory)
@@ -20,18 +20,16 @@ private val valueAdaptedMoshi: Moshi = Moshi.Builder()
 
 private fun Map<Any, String>.compareSerialization() {
   forEach {
-    println("Input JSON: \t${it.value}")
+    println("Input JSON: \t\t${it.value}")
     println("Original Value: \t${it.key}")
     try {
-      println("Plain Moshi: \t\t${plainMoshi.serialize(plainMoshi.deserialize(it.value, it.key.javaClass))}")
+      println("Plain Moshi: \t\t${base.serialize(base.deserialize(it.value, it.key.javaClass))}")
     } catch (exception: Exception) {
-      println("Plain Moshi: [${exception.message}]")
+      println("Plain Moshi: \t\t[${exception.message?.replace('\n', ' ')}]")
     }
     println(
       "Value Adapted Moshi: \t" +
-      valueAdaptedMoshi.serialize(
-        valueAdaptedMoshi.deserialize(it.value, it.key.javaClass)
-      )
+      custom.serialize(custom.deserialize(it.value, it.key.javaClass))
     )
     println("\n${"-----------------------".repeat(3)}\n")
   }
