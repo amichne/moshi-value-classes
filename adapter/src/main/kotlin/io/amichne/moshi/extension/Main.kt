@@ -36,7 +36,7 @@ private fun Map<Any, String>.buildExamplesMd() {
     }
     println("> Updated Moshi Deserialization Result:\n> ```\n> ${custom.deserialize(it.value, it.key.javaClass)}\n> ```\n> ")
     println("> Updated Moshi Serialization Result:\n> ```json\n> ${custom.serialize(it.key)}\n> ```\n")
-    println("</details>\n<br>\n")
+    println("</details>\n")
   }
 }
 

@@ -42,7 +42,6 @@ See the below examples for reference on the current moshi behavior and the behav
 > ```
 
 </details>
-<br>
 
 <details>
 
@@ -79,7 +78,6 @@ See the below examples for reference on the current moshi behavior and the behav
 > ```
 
 </details>
-<br>
 
 <details>
 
@@ -116,7 +114,6 @@ See the below examples for reference on the current moshi behavior and the behav
 > ```
 
 </details>
-<br>
 
 <details>
 
@@ -153,7 +150,6 @@ See the below examples for reference on the current moshi behavior and the behav
 > ```
 
 </details>
-<br>
 
 <details>
 
@@ -190,7 +186,6 @@ See the below examples for reference on the current moshi behavior and the behav
 > ```
 
 </details>
-<br>
 
 <details>
 
@@ -227,7 +222,6 @@ See the below examples for reference on the current moshi behavior and the behav
 > ```
 
 </details>
-<br>
 
 <details>
 
@@ -264,7 +258,6 @@ See the below examples for reference on the current moshi behavior and the behav
 > ```
 
 </details>
-<br>
 
 <details>
 
@@ -301,7 +294,6 @@ See the below examples for reference on the current moshi behavior and the behav
 > ```
 
 </details>
-<br>
 
 <details>
 
@@ -338,7 +330,6 @@ See the below examples for reference on the current moshi behavior and the behav
 > ```
 
 </details>
-<br>
 
 <details>
 
@@ -375,7 +366,6 @@ See the below examples for reference on the current moshi behavior and the behav
 > ```
 
 </details>
-<br>
 
 <details>
 
@@ -412,7 +402,6 @@ See the below examples for reference on the current moshi behavior and the behav
 > ```
 
 </details>
-<br>
 
 <details>
 
@@ -449,7 +438,6 @@ See the below examples for reference on the current moshi behavior and the behav
 > ```
 
 </details>
-<br>
 
 <details>
 
@@ -486,7 +474,6 @@ See the below examples for reference on the current moshi behavior and the behav
 > ```
 
 </details>
-<br>
 
 <details>
 
@@ -523,7 +510,6 @@ See the below examples for reference on the current moshi behavior and the behav
 > ```
 
 </details>
-<br>
 
 <details>
 
@@ -560,7 +546,6 @@ See the below examples for reference on the current moshi behavior and the behav
 > ```
 
 </details>
-<br>
 
 <details>
 
@@ -597,7 +582,6 @@ See the below examples for reference on the current moshi behavior and the behav
 > ```
 
 </details>
-<br>
 
 <details>
 
@@ -634,4 +618,3 @@ See the below examples for reference on the current moshi behavior and the behav
 > ```
 
 </details>
-<br>
