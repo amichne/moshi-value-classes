@@ -20,23 +20,23 @@ private val custom: Moshi = Moshi.Builder()
 
 private fun Map<Any, String>.buildExamplesMd() {
   forEach {
-    println("<details>\n\n")
-    println("<summary>${it.key.javaClass.simpleName}</summary>\n\n")
-    println("JSON Literal:\n```json\n${it.value}\n```\n\n")
-    println("Kotlin Object:\n```\n${it.key}\n```\n\n")
+    println("<details>\n")
+    println("<summary>${it.key.javaClass.simpleName}</summary>\n")
+    println("JSON Literal:\n```json\n${it.value}\n```\n")
+    println("Kotlin Object:\n```\n${it.key}\n```\n")
     try {
-      println("Base Moshi Deserialization Result:\n```\n${base.deserialize(it.value, it.key.javaClass)}\n```\n\n")
+      println("Base Moshi Deserialization Result:\n```\n${base.deserialize(it.value, it.key.javaClass)}\n```\n")
     } catch (exception: Exception) {
-      println("Base Moshi Deserialization Result:\n```\n${exception.message?.replace('\n', ' ')}\n```\n\n")
+      println("Base Moshi Deserialization Result:\n```\n${exception.message?.replace('\n', ' ')}\n```\n")
     }
     try {
-      println("Base Moshi Serialization Result:\n```json\n${base.serialize(it.key)}\n```\n\n")
+      println("Base Moshi Serialization Result:\n```json\n${base.serialize(it.key)}\n```\n")
     } catch (exception: Exception) {
-      println("Base Moshi Serialization Result:\n```json\n${exception.message?.replace('\n', ' ')}\n```\n\n")
+      println("Base Moshi Serialization Result:\n```\n${exception.message?.replace('\n', ' ')}\n```\n")
     }
-    println("Updated Moshi Deserialization Result:\n```\n${custom.deserialize(it.value, it.key.javaClass)}\n```\n\n")
-    println("Updated Moshi Serialization Result:\n```json\n${custom.serialize(it.key)}\n```\n\n")
-    println("</details>\n\n")
+    println("Updated Moshi Deserialization Result:\n```\n${custom.deserialize(it.value, it.key.javaClass)}\n```\n")
+    println("Updated Moshi Serialization Result:\n```json\n${custom.serialize(it.key)}\n```\n")
+    println("</details>\n")
   }
 }
 

@@ -1,8 +1,6 @@
 <details>
 
-
 <summary>JvmInlineString</summary>
-
 
 JSON Literal:
 
@@ -44,12 +42,9 @@ Updated Moshi Serialization Result:
 
 </details>
 
-
 <details>
 
-
 <summary>JvmInlineInt</summary>
-
 
 JSON Literal:
 
@@ -91,12 +86,9 @@ Updated Moshi Serialization Result:
 
 </details>
 
-
 <details>
 
-
 <summary>JvmInlineDouble</summary>
-
 
 JSON Literal:
 
@@ -138,12 +130,9 @@ Updated Moshi Serialization Result:
 
 </details>
 
-
 <details>
 
-
 <summary>JvmInlineComplexClass</summary>
-
 
 JSON Literal:
 
@@ -194,12 +183,9 @@ Updated Moshi Serialization Result:
 
 </details>
 
-
 <details>
 
-
 <summary>JvmInlineListInt</summary>
-
 
 JSON Literal:
 
@@ -253,12 +239,9 @@ Updated Moshi Serialization Result:
 
 </details>
 
-
 <details>
 
-
 <summary>JvmInlineMapStringNullableInt</summary>
-
 
 JSON Literal:
 
@@ -307,12 +290,9 @@ Updated Moshi Serialization Result:
 
 </details>
 
-
 <details>
 
-
 <summary>JvmInlineMapComplexClass</summary>
-
 
 JSON Literal:
 
@@ -371,12 +351,9 @@ Updated Moshi Serialization Result:
 
 </details>
 
-
 <details>
 
-
 <summary>JvmInlineString</summary>
-
 
 JSON Literal:
 
@@ -418,12 +395,9 @@ Updated Moshi Serialization Result:
 
 </details>
 
-
 <details>
 
-
 <summary>JvmInlineNullableString</summary>
-
 
 JSON Literal:
 
@@ -465,12 +439,9 @@ Updated Moshi Serialization Result:
 
 </details>
 
-
 <details>
 
-
 <summary>JvmInlineNullableString</summary>
-
 
 JSON Literal:
 
@@ -510,12 +481,9 @@ null
 
 </details>
 
-
 <details>
 
-
 <summary>JvmInlineComplexClassWithParameterizedField</summary>
-
 
 JSON Literal:
 
@@ -587,13 +555,10 @@ Updated Moshi Serialization Result:
 
 </details>
 
-
 <details>
-
 
 <summary>JvmInlineUInt</summary>
 
-
 JSON Literal:
 
 ```json
@@ -614,7 +579,7 @@ Platform class kotlin.UInt requires explicit JsonAdapter to be registered for cl
 
 Base Moshi Serialization Result:
 
-```json
+```
 Platform class kotlin.UInt requires explicit JsonAdapter to be registered for class kotlin.UInt unsignedValue for class io.amichne.moshi.extension.JvmInlineUInt
 ```
 
@@ -632,13 +597,10 @@ Updated Moshi Serialization Result:
 
 </details>
 
-
 <details>
-
 
 <summary>DataClassWithULong</summary>
 
-
 JSON Literal:
 
 ```json
@@ -661,7 +623,7 @@ Platform class kotlin.ULong requires explicit JsonAdapter to be registered for c
 
 Base Moshi Serialization Result:
 
-```json
+```
 Platform class kotlin.ULong requires explicit JsonAdapter to be registered for class kotlin.ULong uLong for class io.amichne.moshi.extension.DataClassWithULong
 ```
 
@@ -681,13 +643,10 @@ Updated Moshi Serialization Result:
 
 </details>
 
-
 <details>
-
 
 <summary>DataClassWithUInt</summary>
 
-
 JSON Literal:
 
 ```json
@@ -710,7 +669,7 @@ Platform class kotlin.UInt requires explicit JsonAdapter to be registered for cl
 
 Base Moshi Serialization Result:
 
-```json
+```
 Platform class kotlin.UInt requires explicit JsonAdapter to be registered for class kotlin.UInt uInt for class io.amichne.moshi.extension.DataClassWithUInt
 ```
 
@@ -730,13 +689,10 @@ Updated Moshi Serialization Result:
 
 </details>
 
-
 <details>
-
 
 <summary>DataClassWithUShort</summary>
 
-
 JSON Literal:
 
 ```json
@@ -759,7 +715,7 @@ Platform class kotlin.UShort requires explicit JsonAdapter to be registered for 
 
 Base Moshi Serialization Result:
 
-```json
+```
 Platform class kotlin.UShort requires explicit JsonAdapter to be registered for class kotlin.UShort uShort for class io.amichne.moshi.extension.DataClassWithUShort
 ```
 
@@ -779,13 +735,10 @@ Updated Moshi Serialization Result:
 
 </details>
 
-
 <details>
-
 
 <summary>DataClassWithUByte</summary>
 
-
 JSON Literal:
 
 ```json
@@ -808,7 +761,7 @@ Platform class kotlin.UByte requires explicit JsonAdapter to be registered for c
 
 Base Moshi Serialization Result:
 
-```json
+```
 Platform class kotlin.UByte requires explicit JsonAdapter to be registered for class kotlin.UByte uByte for class io.amichne.moshi.extension.DataClassWithUByte
 ```
 
@@ -828,12 +781,9 @@ Updated Moshi Serialization Result:
 
 </details>
 
-
 <details>
 
-
 <summary>DataClassWithUIntAndString</summary>
-
 
 JSON Literal:
 
@@ -858,7 +808,7 @@ Platform class kotlin.UInt requires explicit JsonAdapter to be registered for cl
 
 Base Moshi Serialization Result:
 
-```json
+```
 Platform class kotlin.UInt requires explicit JsonAdapter to be registered for class kotlin.UInt unsignedValue for class io.amichne.moshi.extension.DataClassWithUIntAndString
 ```
 
