@@ -13,9 +13,9 @@ private val base: Moshi = Moshi.Builder()
   .addLast(KotlinJsonAdapterFactory())
   .build()
 private val custom: Moshi = Moshi.Builder()
-  .addLast(KotlinJsonAdapterFactory())
-  .add(ValueClassAdapterFactory)
   .add(UnsignedAdapterFactory)
+  .add(ValueClassAdapterFactory)
+  .addLast(KotlinJsonAdapterFactory())
   .build()
 
 private fun Map<Any, String>.compareSerialization() {

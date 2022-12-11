@@ -22,8 +22,8 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 private val moshi: Moshi = Moshi.Builder()
-  .addLast(KotlinJsonAdapterFactory())
   .add(ValueClassAdapterFactory)
+  .addLast(KotlinJsonAdapterFactory())
   .build()
 
 private inline fun <reified T> Moshi.serialize(value: T): String = adapter(T::class.java).toJson(value)
@@ -52,8 +52,8 @@ internal class ValueClassAdapterFactoryTest {
 
   @Nested
   @TestInstance(PER_CLASS)
-  @Suppress("unused")
   inner class JsonTypeConversionTests {
+    @Suppress("unused")
     private fun inlineInstances(): Stream<Arguments> = Stream.of(
       Arguments.of(jvmInlineString),
       Arguments.of(jvmInlineInt),

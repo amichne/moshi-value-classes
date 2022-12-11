@@ -6,7 +6,6 @@ import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.rawType
-import io.amichne.moshi.extension.UnsignedAdapterFactory.isUnsignedType
 import java.lang.reflect.Constructor
 import java.lang.reflect.Type
 import kotlin.reflect.KProperty1
@@ -52,11 +51,21 @@ private class ValueClassAdapter<InlineT : Any, ValueT : Any>(
 }
 
 object ValueClassAdapterFactory : JsonAdapter.Factory {
+  private val unsignedTypes = listOf(
+    ULong::class.java,
+    UInt::class.java,
+    UShort::class.java,
+    UByte::class.java,
+  )
+
+  private val Type.isUnsignedType: Boolean
+    get() = unsignedTypes.any { it.isAssignableFrom(rawType) }
+
   override fun create(
     type: Type,
     annotations: MutableSet<out Annotation>,
     moshi: Moshi,
-  ): JsonAdapter<Any>? = if (type.rawType.kotlin.isValue && !UInt::class.java.isAssignableFrom(type.rawType)) {
+  ): JsonAdapter<Any>? = if (type.rawType.kotlin.isValue && !type.isUnsignedType) {
     val constructor = type.rawType.declaredConstructors.first { it.parameterCount == 1 } as Constructor<*>
     val valueType = type.rawType.declaredFields[0].genericType
     ValueClassAdapter(

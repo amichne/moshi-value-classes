@@ -28,8 +28,11 @@ val jvmInlineStringMultipleConstructorUsage = JvmInlineString("base", "Appended"
 val jvmInlineNotNullNullableString = JvmInlineNullableString("notNull")
 val jvmInlineNullNullableString = JvmInlineNullableString(null)
 val jvmInlineUInt = JvmInlineUInt(unsignedValue = 99u)
-val dataClassWithUInt = DataClassWithUInt(89u)
-val dataClassWithUIntAndString = DataClassWithUIntAndString(stringValue = "foo", unsignedValue = 10u)
+private val dataClassWithUInt = DataClassWithUInt(89u)
+private val dataClassWithULong = DataClassWithULong((Int.MAX_VALUE.toLong() + Short.MAX_VALUE).toULong())
+private val dataClassWithUShort = DataClassWithUShort(13u)
+private val dataClassWithUByte = DataClassWithUByte((Byte.MAX_VALUE.toUByte() + 10u).toUByte())
+private val dataClassWithUIntAndString = DataClassWithUIntAndString(stringValue = "foo", unsignedValue = 10u)
 
 @Language("JSON")
 val jvmInlineValuesToStringRepresentation: MutableMap<Any, String> = mutableMapOf(
@@ -46,9 +49,12 @@ val jvmInlineValuesToStringRepresentation: MutableMap<Any, String> = mutableMapO
   jvmInlineComplexClassWithParameterizedField to """{"strings":["i","have","strings"],"ints":[5, 10]}""",
   jvmInlineUInt to """${jvmInlineUInt.unsignedValue}""",
   dataClassWithUInt to """{"uInt": ${dataClassWithUInt.uInt}}""",
+  dataClassWithULong to """{"uLong": ${dataClassWithULong.uLong}}""",
+  dataClassWithUShort to """{"uShort": ${dataClassWithUShort.uShort}}""",
+  dataClassWithUByte to """{"uByte": ${dataClassWithUByte.uByte}}""",
   dataClassWithUIntAndString to
     """{"stringValue":"${dataClassWithUIntAndString.stringValue}",""" +
-    """"unsignedValue": null}"""
+    """"unsignedValue":${dataClassWithUIntAndString.unsignedValue}}"""
 )
 
 val jvmInlineValuesList = jvmInlineValuesToStringRepresentation.keys.toList()
