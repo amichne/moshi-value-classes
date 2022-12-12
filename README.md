@@ -78,7 +78,7 @@ expecting an unsigned integer.
 
 ## Solution
 
-### Value class
+### Value class ([`ValueClassAdapterFactory`](./adapter/src/main/kotlin/io/amichne/moshi/extension/ValueClassAdapterFactory.kt))
 
 #### Adapter Resolution
 
@@ -102,30 +102,33 @@ expecting an unsigned integer.
 2. Deserialize the JSON content to the type of the declared property using `<ValueClassAdapter>.adapter`
 3. Invoke `<ValueClassAdapter>.constructor` with the declared property parameter and return the result
 
-### Unsigned integers
+### Unsigned integers ([`UnsignedAdapterFactory`](./adapter/src/main/kotlin/io/amichne/moshi/extension/UnsignedAdapterFactory.kt))
 
 #### Adapter Resolution
 
 1. If the type (`T`) being looked up is in `[ULong, UInt, UShort, UByte]`
-   - Else return `null`
+    - Else return `null`
 2. Then return the `UnsignedTypeAdapter<T>` with the type mapper `ULong.() -> T`
 
 #### Serialization
+
 1. Convert the unsigned value to a string representation
 2. Write the string representation **without any additional encoding**
-   - This is required to avoid the scenario where a unsigned number with a most significant bit being written as a negative value
+    - This is required to avoid the scenario where a unsigned number with a most significant bit being written as a negative value
 
 #### Deserialization
+
 1. Peek the next token in the `JsonReader`
 2. If it is `NUMBER`
-   - Else if it's `NULL` read the next null via `reader.nextNull()`
-   - Else throw an exception, as we know it must be an illegal value
+    - Else if it's `NULL` read the next null via `reader.nextNull()`
+    - Else throw an exception, as we know it must be an illegal value
 3. Then read it into a string literal
-   - This is required to avoid the situation where we would read an unsigned long larger than `Long.MAX_VALUE` which would result in a error despite valid data being deserialized
+    - This is required to avoid the situation where we would read an unsigned long larger than `Long.MAX_VALUE` which would result in a error despite
+      valid data being deserialized
 4. Convert the string to an unsigned long
+    - Right now we're enforcing that the original value can't be larger than the unsigned types MAX_VALUE, but I don't know if this is the right
+      choice
 5. Convert the unsigned long to the requested unsigned type
-
-
 
 The code in [`ValueClassAdapterFactory`](./adapter/src/main/kotlin/io/amichne/moshi/extension/ValueClassAdapterFactory.kt)
 solves the issue for user-created `value class` declarations.
@@ -177,7 +180,6 @@ Updated Moshi Serialization Result:
 ```json
 "exampleValue"
 ```
-
 
 <br>
 

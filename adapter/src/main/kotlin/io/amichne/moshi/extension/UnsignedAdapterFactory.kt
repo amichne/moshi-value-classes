@@ -25,7 +25,7 @@ private class UnsignedTypeAdapter<UnsignedT : UnsignedNumber>(
     Token.NUMBER -> reader.nextString().toULong().toUnsignedT()
     Token.NULL -> reader.nextNull()
     else -> throw JsonDataException(
-      "Expected an unsigned number but was ${reader.readJsonValue()}" +
+      "Expected an unsigned number but was ${reader.readJsonValue()}, " +
       "a $next, at path ${reader.path}",
       IllegalArgumentException(next.name)
     )
@@ -35,9 +35,15 @@ private class UnsignedTypeAdapter<UnsignedT : UnsignedNumber>(
 object UnsignedAdapterFactory : JsonAdapter.Factory {
   private val unsignedTypesMapperMap: Map<Class<*>, ULong.() -> UnsignedNumber> = mapOf(
     ULong::class.java to { this },
-    UInt::class.java to { toUInt() },
-    UShort::class.java to { toUShort() },
-    UByte::class.java to { toUByte() }
+    UInt::class.java to {
+      if (this > UInt.MAX_VALUE) throw NumberFormatException("Invalid UInt format: '$this'") else toUInt()
+    },
+    UShort::class.java to {
+      if (this > UShort.MAX_VALUE) throw NumberFormatException("Invalid UShort format: '$this'") else toUShort()
+    },
+    UByte::class.java to {
+      if (this > UByte.MAX_VALUE) throw NumberFormatException("Invalid UByte format: '$this'") else toUByte()
+    }
   )
 
   private val Type.isUnsignedType: Boolean
