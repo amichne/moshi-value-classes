@@ -22,8 +22,8 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 private val moshi: Moshi = Moshi.Builder()
-  .add(ValueClassAdapterFactory)
-  .add(UnsignedAdapterFactory)
+  .add(ValueClassAdapter.Factory)
+  .add(UnsignedNumberAdapter.Factory)
   .addLast(KotlinJsonAdapterFactory())
   .build()
 

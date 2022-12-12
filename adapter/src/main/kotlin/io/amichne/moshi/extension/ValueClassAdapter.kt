@@ -1,3 +1,5 @@
+@file:JvmName("FactoryKt")
+
 package io.amichne.moshi.extension
 
 import com.squareup.moshi.JsonAdapter
@@ -19,7 +21,7 @@ private fun <T : Any, ValueT> T.declaredProperty(): ValueT =
     get(this@declaredProperty) as ValueT
   }
 
-private class ValueClassAdapter<InlineT : Any, ValueT : Any>(
+internal class ValueClassAdapter<InlineT : Any, ValueT : Any> private constructor(
   private val constructor: Constructor<out InlineT>,
   private val adapter: JsonAdapter<ValueT>,
 ) : JsonAdapter<InlineT>() {
@@ -47,9 +49,8 @@ private class ValueClassAdapter<InlineT : Any, ValueT : Any>(
       )
     }
   }
-}
 
-object ValueClassAdapterFactory : JsonAdapter.Factory {
+  object Factory : JsonAdapter.Factory {
   private val unsignedTypes = listOf(
     ULong::class.java,
     UInt::class.java,
@@ -81,4 +82,5 @@ object ValueClassAdapterFactory : JsonAdapter.Factory {
   ): JsonAdapter<V> {
     return adapter(valueType)
   }
+}
 }

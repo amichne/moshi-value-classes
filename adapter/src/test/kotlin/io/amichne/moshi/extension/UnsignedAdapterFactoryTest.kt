@@ -17,7 +17,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
 private val moshi: Moshi = Moshi.Builder()
-  .add(UnsignedAdapterFactory)
+  .add(UnsignedNumberAdapter.Factory)
   .addLast(KotlinJsonAdapterFactory())
   .build()
 
