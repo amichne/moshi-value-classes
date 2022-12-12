@@ -6,7 +6,6 @@ import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonReader.Token
 import com.squareup.moshi.JsonWriter
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.internal.NullSafeJsonAdapter
 import com.squareup.moshi.rawType
 import java.lang.reflect.Type
 
@@ -23,24 +22,10 @@ private class UnsignedTypeAdapter<UnsignedT : UnsignedNumber>(
   }
 
   override fun fromJson(reader: JsonReader): UnsignedT? = when (val next = reader.peek()) {
-    Token.NUMBER -> {
-      val stringOfNumber = reader.nextString()
-      if (stringOfNumber.startsWith('-')) {
-        throw JsonDataException(
-          "Expected an unsigned number but got $stringOfNumber, " +
-          "a signed number, at path ${reader.path}",
-          IllegalArgumentException(stringOfNumber)
-        )
-      }
-      stringOfNumber.toULong().toUnsignedT()
-    }
-
-    Token.NULL -> {
-      reader.nextNull()
-    }
-
+    Token.NUMBER -> reader.nextString().toULong().toUnsignedT()
+    Token.NULL -> reader.nextNull()
     else -> throw JsonDataException(
-      "Expected an unsigned number but was  " +
+      "Expected an unsigned number but was ${reader.readJsonValue()}" +
       "a $next, at path ${reader.path}",
       IllegalArgumentException(next.name)
     )
@@ -49,7 +34,7 @@ private class UnsignedTypeAdapter<UnsignedT : UnsignedNumber>(
 
 object UnsignedAdapterFactory : JsonAdapter.Factory {
   private val unsignedTypesMapperMap: Map<Class<*>, ULong.() -> UnsignedNumber> = mapOf(
-    ULong::class.java to { toULong() },
+    ULong::class.java to { this },
     UInt::class.java to { toUInt() },
     UShort::class.java to { toUShort() },
     UByte::class.java to { toUByte() }

@@ -89,15 +89,9 @@ class UnsignedAdapterFactoryTest {
 
     @Language("JSON")
     val stringRepresentation = """{"$propertyName":$negativeValue}"""
-    assertThat(
-      requireNotNull(
-        assertThrows<JsonDataException> {
-          moshi.adapter(type).fromJson(stringRepresentation)
-        }.cause
-      ).message
-    ).isEqualTo(
-      other = "$negativeValue"
-    )
+    assertThrows<NumberFormatException> {
+      moshi.adapter(type).fromJson(stringRepresentation)
+    }
   }
 
   @Test

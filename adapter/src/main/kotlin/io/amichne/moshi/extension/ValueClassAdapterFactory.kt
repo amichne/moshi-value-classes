@@ -20,8 +20,8 @@ private fun <T : Any, ValueT> T.declaredProperty(): ValueT =
   }
 
 private class ValueClassAdapter<InlineT : Any, ValueT : Any>(
-  val constructor: Constructor<out InlineT>,
-  val adapter: JsonAdapter<ValueT>,
+  private val constructor: Constructor<out InlineT>,
+  private val adapter: JsonAdapter<ValueT>,
 ) : JsonAdapter<InlineT>() {
   override fun toJson(
     writer: JsonWriter,
@@ -39,7 +39,6 @@ private class ValueClassAdapter<InlineT : Any, ValueT : Any>(
   @Suppress("TooGenericExceptionCaught")
   override fun fromJson(reader: JsonReader): InlineT = reader.readJsonValue().let { jsonValue ->
     try {
-      constructor.isAccessible = true
       constructor.newInstance(adapter.fromJsonValue(jsonValue))
     } catch (throwable: Throwable) {
       throw JsonDataException(
@@ -66,7 +65,8 @@ object ValueClassAdapterFactory : JsonAdapter.Factory {
     annotations: MutableSet<out Annotation>,
     moshi: Moshi,
   ): JsonAdapter<Any>? = if (type.rawType.kotlin.isValue && !type.isUnsignedType) {
-    val constructor = type.rawType.declaredConstructors.first { it.parameterCount == 1 } as Constructor<*>
+    val constructor = (type.rawType.declaredConstructors.first { it.parameterCount == 1 } as Constructor<*>)
+      .also { it.isAccessible = true }
     val valueType = type.rawType.declaredFields[0].genericType
     ValueClassAdapter(
       constructor = constructor,
