@@ -89,19 +89,57 @@ class UnsignedAdapterFactoryTest {
 
     @Language("JSON")
     val stringRepresentation = """{"$propertyName":$negativeValue}"""
-    assertThat(
-      requireNotNull(
-        assertThrows<JsonDataException> {
-          moshi.adapter(type).fromJson(stringRepresentation)
-        }.cause
-      ).message
-    ).isEqualTo(
-      other = "$negativeValue"
-    )
+    assertThrows<NumberFormatException> {
+      moshi.adapter(type).fromJson(stringRepresentation)
+    }
   }
 
   @Test
-  fun `When a unsigned field is not null nullable, and the value is null, than an exception is thrown`() {
+  fun `When a unsigned value is larger than it's max, then an exception is thrown`() {
+    @Language("JSON")
+    val uLongStringRepresentation = """{"uLong": 18446744100000000000}"""
+
+    @Language("JSON")
+    val uIntStringRepresentation = """{"uInt": 4295032828}"""
+
+    @Language("JSON")
+    val uShortStringRepresentation = """{"uShort": 65788}"""
+
+    @Language("JSON")
+    val uByteStringRepresentation = """{"uByte": 274}"""
+
+    assertThrows<NumberFormatException> {
+      moshi.deserialize(uLongStringRepresentation, DataClassWithULong::class.java)
+    }
+
+    assertThrows<NumberFormatException> {
+      moshi.deserialize(uIntStringRepresentation, DataClassWithUInt::class.java)
+    }
+
+    assertThrows<NumberFormatException> {
+      moshi.deserialize(uShortStringRepresentation, DataClassWithUShort::class.java)
+    }
+
+    assertThrows<NumberFormatException> {
+      moshi.deserialize(uByteStringRepresentation, DataClassWithUByte::class.java)
+    }
+  }
+
+  @Test
+  fun `When a unsigned field is not null nullable, and the value is null, then an exception is thrown`() {
+    @Language("JSON")
+    val stringRepresentation = """{"uLong": "10"}"""
+    assertThat(
+      requireNotNull(
+        assertThrows<JsonDataException> {
+          moshi.deserialize(stringRepresentation, DataClassWithULong::class.java)
+        }.message
+      ).also { println(it) }
+    ).isEqualTo("Expected an unsigned number but was 10, a STRING, at path $.uLong")
+  }
+
+  @Test
+  fun `When a unsigned field gets a not null not number token, then an exception is thrown`() {
     @Language("JSON")
     val stringRepresentation = """{"uLong": null}"""
     assertThat(

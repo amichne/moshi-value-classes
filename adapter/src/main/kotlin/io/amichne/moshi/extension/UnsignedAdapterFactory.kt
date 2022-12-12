@@ -6,7 +6,6 @@ import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonReader.Token
 import com.squareup.moshi.JsonWriter
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.internal.NullSafeJsonAdapter
 import com.squareup.moshi.rawType
 import java.lang.reflect.Type
 
@@ -23,24 +22,10 @@ private class UnsignedTypeAdapter<UnsignedT : UnsignedNumber>(
   }
 
   override fun fromJson(reader: JsonReader): UnsignedT? = when (val next = reader.peek()) {
-    Token.NUMBER -> {
-      val stringOfNumber = reader.nextString()
-      if (stringOfNumber.startsWith('-')) {
-        throw JsonDataException(
-          "Expected an unsigned number but got $stringOfNumber, " +
-          "a signed number, at path ${reader.path}",
-          IllegalArgumentException(stringOfNumber)
-        )
-      }
-      stringOfNumber.toULong().toUnsignedT()
-    }
-
-    Token.NULL -> {
-      reader.nextNull()
-    }
-
+    Token.NUMBER -> reader.nextString().toULong().toUnsignedT()
+    Token.NULL -> reader.nextNull()
     else -> throw JsonDataException(
-      "Expected an unsigned number but was  " +
+      "Expected an unsigned number but was ${reader.readJsonValue()}, " +
       "a $next, at path ${reader.path}",
       IllegalArgumentException(next.name)
     )
@@ -49,10 +34,16 @@ private class UnsignedTypeAdapter<UnsignedT : UnsignedNumber>(
 
 object UnsignedAdapterFactory : JsonAdapter.Factory {
   private val unsignedTypesMapperMap: Map<Class<*>, ULong.() -> UnsignedNumber> = mapOf(
-    ULong::class.java to { toULong() },
-    UInt::class.java to { toUInt() },
-    UShort::class.java to { toUShort() },
-    UByte::class.java to { toUByte() }
+    ULong::class.java to { this },
+    UInt::class.java to {
+      if (this > UInt.MAX_VALUE) throw NumberFormatException("Invalid UInt format: '$this'") else toUInt()
+    },
+    UShort::class.java to {
+      if (this > UShort.MAX_VALUE) throw NumberFormatException("Invalid UShort format: '$this'") else toUShort()
+    },
+    UByte::class.java to {
+      if (this > UByte.MAX_VALUE) throw NumberFormatException("Invalid UByte format: '$this'") else toUByte()
+    }
   )
 
   private val Type.isUnsignedType: Boolean
