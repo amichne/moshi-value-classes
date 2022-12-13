@@ -1,10 +1,5 @@
 package io.amichne.moshi.extension
 
-// Generified value classes are being added in Kotlin 1.8 (as experimental), need to support at that point
-// https://kotlinlang.org/docs/inline-classes.html#mangling
-// @JvmInline
-// value class JvmInlineGeneric<ValueT: Any>(val value: ValueT)
-
 @JvmInline
 value class JvmInlineNullableString(val value: String?)
 
@@ -24,12 +19,6 @@ value class JvmInlineInt(val value: Int)
 
 @JvmInline
 value class JvmInlineUInt(val unsignedValue: UInt)
-
-data class DataClassWithUInt(val uInt: UInt)
-data class DataClassWithULong(val uLong: ULong)
-data class DataClassWithUShort(val uShort: UShort)
-data class DataClassWithUByte(val uByte: UByte)
-data class DataClassWithNullableULong(val nullableULong: ULong?)
 
 data class DataClassWithUIntAndString(
   val stringValue: String,
@@ -67,3 +56,13 @@ value class JvmInlineComplexClassWithParameterizedField(
     val ints: List<Int>,
   )
 }
+
+data class DataClassWithUInt(val uInt: UInt)
+
+data class DataClassWithULong(val uLong: ULong)
+
+data class DataClassWithUShort(val uShort: UShort)
+
+data class DataClassWithUByte(val uByte: UByte)
+
+data class DataClassWithNullableULong(val nullableULong: ULong?)

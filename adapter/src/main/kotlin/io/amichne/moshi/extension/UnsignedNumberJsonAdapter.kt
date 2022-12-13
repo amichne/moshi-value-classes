@@ -9,9 +9,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.rawType
 import java.lang.reflect.Type
 
-typealias UnsignedNumber = Any
-
-internal class UnsignedNumberAdapter<UnsignedT : UnsignedNumber> private constructor(
+internal class UnsignedNumberJsonAdapter<UnsignedT : Any> private constructor(
   private val toUnsignedT: ULong.() -> UnsignedT,
 ) : JsonAdapter<UnsignedT>() {
   override fun toJson(writer: JsonWriter, value: UnsignedT?) {
@@ -22,7 +20,16 @@ internal class UnsignedNumberAdapter<UnsignedT : UnsignedNumber> private constru
   }
 
   override fun fromJson(reader: JsonReader): UnsignedT? = when (val next = reader.peek()) {
-    Token.NUMBER -> reader.nextString().toULong().toUnsignedT()
+    Token.NUMBER -> {
+      try {
+        reader.nextString().toULong().toUnsignedT()
+      } catch (numberFormatException: NumberFormatException) {
+        throw JsonDataException(
+          "${numberFormatException.message} for unsigned number at ${reader.path}"
+        )
+      }
+    }
+
     Token.NULL -> reader.nextNull()
     else -> throw JsonDataException(
       "Expected an unsigned number but was ${reader.readJsonValue()}, " +
@@ -32,31 +39,29 @@ internal class UnsignedNumberAdapter<UnsignedT : UnsignedNumber> private constru
   }
 
   object Factory : JsonAdapter.Factory {
-    private val unsignedTypesMapperMap: Map<Class<*>, ULong.() -> UnsignedNumber> = mapOf(
+    private val unsignedTypesMapperMap: Map<Class<*>, ULong.() -> Any> = mapOf(
       ULong::class.java to { this },
       UInt::class.java to {
-        if (this > UInt.MAX_VALUE) throw NumberFormatException("Invalid UInt format: '$this'") else toUInt()
+        if (this > UInt.MAX_VALUE) throw NumberFormatException("Invalid number format: '$this'") else toUInt()
       },
       UShort::class.java to {
-        if (this > UShort.MAX_VALUE) throw NumberFormatException("Invalid UShort format: '$this'") else toUShort()
+        if (this > UShort.MAX_VALUE) throw NumberFormatException("Invalid number format: '$this'") else toUShort()
       },
       UByte::class.java to {
-        if (this > UByte.MAX_VALUE) throw NumberFormatException("Invalid UByte format: '$this'") else toUByte()
+        if (this > UByte.MAX_VALUE) throw NumberFormatException("Invalid number format: '$this'") else toUByte()
       }
     )
 
     private val Type.isUnsignedType: Boolean
-      get() = unsignedTypesMapperMap.keys.any { it.isAssignableFrom(rawType) }
+      get() = unsignedTypesMapperMap.keys.contains(rawType)
 
-    private val Type.mapper: ULong.() -> UnsignedNumber
+    private val Type.mapper: ULong.() -> Any
       get() = unsignedTypesMapperMap[rawType]!!
 
     override fun create(
       type: Type,
-      annotations: MutableSet<out Annotation>,
+      annotations: Set<Annotation>,
       moshi: Moshi,
-    ): JsonAdapter<*>? = if (type.isUnsignedType) {
-      UnsignedNumberAdapter(type.mapper)
-    } else null
+    ): JsonAdapter<*>? = if (type.isUnsignedType) UnsignedNumberJsonAdapter(type.mapper) else null
   }
 }

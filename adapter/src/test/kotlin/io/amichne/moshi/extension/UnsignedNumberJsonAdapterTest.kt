@@ -3,6 +3,7 @@ package io.amichne.moshi.extension
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNull
+import assertk.assertions.startsWith
 import assertk.fail
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.Moshi
@@ -17,29 +18,20 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
 private val moshi: Moshi = Moshi.Builder()
-  .add(UnsignedNumberAdapter.Factory)
+  .add(UnsignedNumberJsonAdapter.Factory)
   .addLast(KotlinJsonAdapterFactory())
   .build()
 
-private fun <T : Any> Moshi.deserialize(value: String, type: Class<T>): T = adapter(type).fromJson(value)!!
-
-private val dataClassWithUInt = DataClassWithUInt(Int.MAX_VALUE.toUInt() + Short.MAX_VALUE.toUInt())
-private val dataClassWithULong = DataClassWithULong(Long.MAX_VALUE.toULong() + Int.MAX_VALUE.toUInt())
-private val dataClassWithUShort = DataClassWithUShort(
-  (Short.MAX_VALUE.toUShort() + Byte.MAX_VALUE.toUShort()).toUShort()
-)
-private val dataClassWithUByte = DataClassWithUByte((Byte.MAX_VALUE.toUByte() + 10u).toUByte())
-
 @Language("JSON")
 private val unsignedToStringRepresentation: Map<Any, String> = mapOf(
-  dataClassWithULong to """{"uLong":${dataClassWithULong.uLong}}""", // uLong=9223372039002259454
-  dataClassWithUInt to """{"uInt":${dataClassWithUInt.uInt}}""", // uInt=2147516414
-  dataClassWithUShort to """{"uShort":${dataClassWithUShort.uShort}}""", // uShort=32894
-  dataClassWithUByte to """{"uByte":${dataClassWithUByte.uByte}}""", // uByte=137
+  dataClassWithULong to """{"uLong":${dataClassWithULong.uLong}}""",
+  dataClassWithUInt to """{"uInt":${dataClassWithUInt.uInt}}""",
+  dataClassWithUShort to """{"uShort":${dataClassWithUShort.uShort}}""",
+  dataClassWithUByte to """{"uByte":${dataClassWithUByte.uByte}}""",
 )
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class UnsignedAdapterFactoryTest {
+class UnsignedNumberJsonAdapterTest {
   private fun assertSerializedDeserialized(original: Any) =
     when (val stringRepresentation = unsignedToStringRepresentation[original]) {
       null -> fail("Missing string representation of $original")
@@ -89,39 +81,33 @@ class UnsignedAdapterFactoryTest {
 
     @Language("JSON")
     val stringRepresentation = """{"$propertyName":$negativeValue}"""
-    assertThrows<NumberFormatException> {
-      moshi.adapter(type).fromJson(stringRepresentation)
-    }
+    assertThat(
+      requireNotNull(
+        assertThrows<JsonDataException> {
+          moshi.adapter(type).fromJson(stringRepresentation)
+        }.message
+      )
+    ).startsWith("Invalid number format: '-1' for unsigned number at $.")
   }
 
   @Test
   fun `When a unsigned value is larger than it's max, then an exception is thrown`() {
     @Language("JSON")
-    val uLongStringRepresentation = """{"uLong": 18446744100000000000}"""
+    val overflowingMap = mapOf(
+      DataClassWithULong::class.java to """{"uLong": 18446744100000000000}""",
+      DataClassWithUInt::class.java to """{"uInt": 4295032828}""",
+      DataClassWithUShort::class.java to """{"uShort": 65788}""",
+      DataClassWithUByte::class.java to """{"uByte": 274}"""
+    )
 
-    @Language("JSON")
-    val uIntStringRepresentation = """{"uInt": 4295032828}"""
-
-    @Language("JSON")
-    val uShortStringRepresentation = """{"uShort": 65788}"""
-
-    @Language("JSON")
-    val uByteStringRepresentation = """{"uByte": 274}"""
-
-    assertThrows<NumberFormatException> {
-      moshi.deserialize(uLongStringRepresentation, DataClassWithULong::class.java)
-    }
-
-    assertThrows<NumberFormatException> {
-      moshi.deserialize(uIntStringRepresentation, DataClassWithUInt::class.java)
-    }
-
-    assertThrows<NumberFormatException> {
-      moshi.deserialize(uShortStringRepresentation, DataClassWithUShort::class.java)
-    }
-
-    assertThrows<NumberFormatException> {
-      moshi.deserialize(uByteStringRepresentation, DataClassWithUByte::class.java)
+    overflowingMap.forEach { (type, string) ->
+      assertThat(
+        requireNotNull(
+          assertThrows<JsonDataException> {
+            moshi.deserialize(string, type)
+          }.message
+        )
+      ).startsWith("Invalid number format:")
     }
   }
 
@@ -134,7 +120,7 @@ class UnsignedAdapterFactoryTest {
         assertThrows<JsonDataException> {
           moshi.deserialize(stringRepresentation, DataClassWithULong::class.java)
         }.message
-      ).also { println(it) }
+      )
     ).isEqualTo("Expected an unsigned number but was 10, a STRING, at path $.uLong")
   }
 
