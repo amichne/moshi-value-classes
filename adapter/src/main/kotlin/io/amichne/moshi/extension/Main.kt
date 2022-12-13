@@ -13,8 +13,8 @@ private val base: Moshi = Moshi.Builder()
   .addLast(KotlinJsonAdapterFactory())
   .build()
 private val custom: Moshi = Moshi.Builder()
-  .add(UnsignedNumberAdapter.Factory)
-  .add(ValueClassAdapter.Factory)
+  .add(UnsignedNumberJsonAdapter.Factory)
+  .add(ValueClassJsonAdapter.Factory)
   .addLast(KotlinJsonAdapterFactory())
   .build()
 
@@ -41,5 +41,5 @@ private fun Map<Any, String>.buildExamplesMd() {
 }
 
 fun main() {
-  instanceToJsonStringMap.buildExamplesMd()
+//  instanceToJsonStringMap.buildExamplesMd()
 }

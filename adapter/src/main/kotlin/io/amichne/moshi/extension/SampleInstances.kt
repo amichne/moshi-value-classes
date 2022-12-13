@@ -4,30 +4,28 @@ package io.amichne.moshi.extension
 
 import org.intellij.lang.annotations.Language
 
-val jvmInlineString = JvmInlineString("exampleValue")
-val jvmInlineInt = JvmInlineInt(10)
-val jvmInlineDouble = JvmInlineDouble(0.5)
-val exampleNestedClass = JvmInlineComplexClass.ExampleNestedClass(
+private val jvmInlineString = JvmInlineString("exampleValue")
+private val jvmInlineInt = JvmInlineInt(10)
+private val jvmInlineDouble = JvmInlineDouble(0.5)
+private val exampleNestedClass = JvmInlineComplexClass.ExampleNestedClass(
   stringValue = "a string",
   intValue = 10
 )
-val jvmInlineComplexClass = JvmInlineComplexClass(value = exampleNestedClass)
-val jvmInlineListInt = JvmInlineListInt(list = listOf(0, 2, 99))
-val jvmInlineMapStringNullableInt = JvmInlineMapStringNullableInt(mapOf("first" to 1, "missing" to null))
-val jvmInlineMapComplexClass = JvmInlineMapComplexClass(mapOf("key" to jvmInlineComplexClass))
-val exampleNestedClassWithParameterizedField =
-  JvmInlineComplexClassWithParameterizedField.ExampleNestedClassWithParameterizedField(
+private val jvmInlineComplexClass = JvmInlineComplexClass(value = exampleNestedClass)
+private val jvmInlineListInt = JvmInlineListInt(list = listOf(0, 2, 99))
+private val jvmInlineMapStringNullableInt = JvmInlineMapStringNullableInt(mapOf("first" to 1, "missing" to null))
+private val jvmInlineMapComplexClass = JvmInlineMapComplexClass(mapOf("key" to jvmInlineComplexClass))
+private val jvmInlineComplexClassWithParameterizedField = JvmInlineComplexClassWithParameterizedField(
+  value = JvmInlineComplexClassWithParameterizedField.ExampleNestedClassWithParameterizedField(
     strings = listOf("i", "have", "strings"),
     ints = listOf(5, 10)
   )
-val jvmInlineComplexClassWithParameterizedField = JvmInlineComplexClassWithParameterizedField(
-  value = exampleNestedClassWithParameterizedField
 )
 
-val jvmInlineStringMultipleConstructorUsage = JvmInlineString("base", "Appended")
-val jvmInlineNotNullNullableString = JvmInlineNullableString("notNull")
-val jvmInlineNullNullableString = JvmInlineNullableString(null)
-val jvmInlineUInt = JvmInlineUInt(unsignedValue = 99u)
+private val jvmInlineStringMultipleConstructorUsage = JvmInlineString("base", "Appended")
+private val jvmInlineNotNullNullableString = JvmInlineNullableString("notNull")
+private val jvmInlineNullNullableString = JvmInlineNullableString(null)
+private val jvmInlineUInt = JvmInlineUInt(unsignedValue = 99u)
 private val dataClassWithUInt = DataClassWithUInt(Int.MAX_VALUE.toUInt() + Short.MAX_VALUE.toUInt())
 private val dataClassWithULong = DataClassWithULong(Long.MAX_VALUE.toULong() + Int.MAX_VALUE.toUInt())
 private val dataClassWithUShort = DataClassWithUShort(
@@ -40,7 +38,7 @@ private val dataClassWithUIntAndString = DataClassWithUIntAndString(
 )
 
 @Language("JSON")
-val instanceToJsonStringMap: MutableMap<Any, String> = mutableMapOf(
+private val instanceToJsonStringMap: MutableMap<Any, String> = mutableMapOf(
   jvmInlineString to """"${jvmInlineString.value}"""",
   jvmInlineInt to "${jvmInlineInt.value}",
   jvmInlineDouble to "${jvmInlineDouble.value}",
@@ -57,10 +55,10 @@ val instanceToJsonStringMap: MutableMap<Any, String> = mutableMapOf(
   jvmInlineNullNullableString to """null""",
   jvmInlineComplexClassWithParameterizedField to """{"strings":["i","have","strings"],"ints":[5,10]}""",
   jvmInlineUInt to """${jvmInlineUInt.unsignedValue}""",
-  dataClassWithULong to """{"uLong":${dataClassWithULong.uLong}}""",     // uLong=9223372039002259454
-  dataClassWithUInt to """{"uInt":${dataClassWithUInt.uInt}}""",         // uInt=2147516414
-  dataClassWithUShort to """{"uShort":${dataClassWithUShort.uShort}}""", // uShort=32894
-  dataClassWithUByte to """{"uByte":${dataClassWithUByte.uByte}}""",     // uByte=137
+  dataClassWithULong to """{"uLong":${dataClassWithULong.uLong}}""",
+  dataClassWithUInt to """{"uInt":${dataClassWithUInt.uInt}}""",
+  dataClassWithUShort to """{"uShort":${dataClassWithUShort.uShort}}""",
+  dataClassWithUByte to """{"uByte":${dataClassWithUByte.uByte}}""",
   dataClassWithUIntAndString to
     """{"stringValue":"${dataClassWithUIntAndString.stringValue}",""" +
     """"unsignedValue":${dataClassWithUIntAndString.unsignedValue}}"""
