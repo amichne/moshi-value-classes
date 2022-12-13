@@ -53,17 +53,15 @@ internal class UnsignedNumberJsonAdapter<UnsignedT : Any> private constructor(
     )
 
     private val Type.isUnsignedType: Boolean
-      get() = unsignedTypesMapperMap.keys.any { it.isAssignableFrom(rawType) }
+      get() = unsignedTypesMapperMap.keys.contains(rawType)
 
     private val Type.mapper: ULong.() -> Any
       get() = unsignedTypesMapperMap[rawType]!!
 
     override fun create(
       type: Type,
-      annotations: MutableSet<out Annotation>,
+      annotations: Set<Annotation>,
       moshi: Moshi,
-    ): JsonAdapter<*>? = if (type.isUnsignedType) {
-      UnsignedNumberJsonAdapter(type.mapper)
-    } else null
+    ): JsonAdapter<*>? = if (type.isUnsignedType) UnsignedNumberJsonAdapter(type.mapper) else null
   }
 }

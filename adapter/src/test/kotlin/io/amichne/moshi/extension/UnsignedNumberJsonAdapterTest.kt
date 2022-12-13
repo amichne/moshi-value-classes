@@ -22,15 +22,6 @@ private val moshi: Moshi = Moshi.Builder()
   .addLast(KotlinJsonAdapterFactory())
   .build()
 
-private fun <T : Any> Moshi.deserialize(value: String, type: Class<T>): T = adapter(type).fromJson(value)!!
-
-private val dataClassWithUInt = DataClassWithUInt(Int.MAX_VALUE.toUInt() + Short.MAX_VALUE.toUInt())
-private val dataClassWithULong = DataClassWithULong(Long.MAX_VALUE.toULong() + Int.MAX_VALUE.toUInt())
-private val dataClassWithUShort = DataClassWithUShort(
-  (Short.MAX_VALUE.toUShort() + Byte.MAX_VALUE.toUShort()).toUShort()
-)
-private val dataClassWithUByte = DataClassWithUByte((Byte.MAX_VALUE.toUByte() + 10u).toUByte())
-
 @Language("JSON")
 private val unsignedToStringRepresentation: Map<Any, String> = mapOf(
   dataClassWithULong to """{"uLong":${dataClassWithULong.uLong}}""",

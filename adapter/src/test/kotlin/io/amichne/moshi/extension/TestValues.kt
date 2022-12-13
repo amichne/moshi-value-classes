@@ -1,44 +1,42 @@
-@file:Suppress("MagicNumber")
-
 package io.amichne.moshi.extension
 
 import org.intellij.lang.annotations.Language
 
-private val jvmInlineString = JvmInlineString("exampleValue")
-private val jvmInlineInt = JvmInlineInt(10)
-private val jvmInlineDouble = JvmInlineDouble(0.5)
-private val exampleNestedClass = JvmInlineComplexClass.ExampleNestedClass(
+val jvmInlineString = JvmInlineString("exampleValue")
+val jvmInlineInt = JvmInlineInt(10)
+val jvmInlineDouble = JvmInlineDouble(0.5)
+val exampleNestedClass = JvmInlineComplexClass.ExampleNestedClass(
   stringValue = "a string",
   intValue = 10
 )
-private val jvmInlineComplexClass = JvmInlineComplexClass(value = exampleNestedClass)
-private val jvmInlineListInt = JvmInlineListInt(list = listOf(0, 2, 99))
-private val jvmInlineMapStringNullableInt = JvmInlineMapStringNullableInt(mapOf("first" to 1, "missing" to null))
-private val jvmInlineMapComplexClass = JvmInlineMapComplexClass(mapOf("key" to jvmInlineComplexClass))
-private val jvmInlineComplexClassWithParameterizedField = JvmInlineComplexClassWithParameterizedField(
+val jvmInlineComplexClass = JvmInlineComplexClass(value = exampleNestedClass)
+val jvmInlineListInt = JvmInlineListInt(list = listOf(0, 2, 99))
+val jvmInlineMapStringNullableInt = JvmInlineMapStringNullableInt(mapOf("first" to 1, "missing" to null))
+val jvmInlineMapComplexClass = JvmInlineMapComplexClass(mapOf("key" to jvmInlineComplexClass))
+val jvmInlineComplexClassWithParameterizedField = JvmInlineComplexClassWithParameterizedField(
   value = JvmInlineComplexClassWithParameterizedField.ExampleNestedClassWithParameterizedField(
     strings = listOf("i", "have", "strings"),
     ints = listOf(5, 10)
   )
 )
 
-private val jvmInlineStringMultipleConstructorUsage = JvmInlineString("base", "Appended")
-private val jvmInlineNotNullNullableString = JvmInlineNullableString("notNull")
-private val jvmInlineNullNullableString = JvmInlineNullableString(null)
-private val jvmInlineUInt = JvmInlineUInt(unsignedValue = 99u)
-private val dataClassWithUInt = DataClassWithUInt(Int.MAX_VALUE.toUInt() + Short.MAX_VALUE.toUInt())
-private val dataClassWithULong = DataClassWithULong(Long.MAX_VALUE.toULong() + Int.MAX_VALUE.toUInt())
-private val dataClassWithUShort = DataClassWithUShort(
+val jvmInlineStringMultipleConstructorUsage = JvmInlineString("base", "Appended")
+val jvmInlineNotNullNullableString = JvmInlineNullableString("notNull")
+val jvmInlineNullNullableString = JvmInlineNullableString(null)
+val jvmInlineUInt = JvmInlineUInt(unsignedValue = 99u)
+val dataClassWithUInt = DataClassWithUInt(Int.MAX_VALUE.toUInt() + Short.MAX_VALUE.toUInt())
+val dataClassWithULong = DataClassWithULong(Long.MAX_VALUE.toULong() + Int.MAX_VALUE.toUInt())
+val dataClassWithUShort = DataClassWithUShort(
   (Short.MAX_VALUE.toUShort() + Byte.MAX_VALUE.toUShort()).toUShort()
 )
-private val dataClassWithUByte = DataClassWithUByte((Byte.MAX_VALUE.toUByte() + 10u).toUByte())
-private val dataClassWithUIntAndString = DataClassWithUIntAndString(
+val dataClassWithUByte = DataClassWithUByte((Byte.MAX_VALUE.toUByte() + 10u).toUByte())
+val dataClassWithUIntAndString = DataClassWithUIntAndString(
   stringValue = "foo",
   unsignedValue = dataClassWithUInt.uInt
 )
 
 @Language("JSON")
-private val instanceToJsonStringMap: MutableMap<Any, String> = mutableMapOf(
+val instanceToJsonStringMap: MutableMap<Any, String> = mutableMapOf(
   jvmInlineString to """"${jvmInlineString.value}"""",
   jvmInlineInt to "${jvmInlineInt.value}",
   jvmInlineDouble to "${jvmInlineDouble.value}",

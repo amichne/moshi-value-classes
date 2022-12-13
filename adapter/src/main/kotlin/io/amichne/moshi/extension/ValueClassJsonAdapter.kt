@@ -20,9 +20,9 @@ internal class ValueClassJsonAdapter<InlineT : Any, ValueT : Any> private constr
 
   override fun toJson(
     writer: JsonWriter,
-    inlineT: InlineT?,
+    value: InlineT?,
   ) {
-    inlineT?.let { writer.jsonValue(adapter.toJsonValue(it.declaredProperty())) }
+    value?.let { writer.jsonValue(adapter.toJsonValue(it.declaredProperty())) }
   }
 
   @Suppress("TooGenericExceptionCaught")
@@ -39,7 +39,7 @@ internal class ValueClassJsonAdapter<InlineT : Any, ValueT : Any> private constr
 
     override fun create(
       type: Type,
-      annotations: MutableSet<out Annotation>,
+      annotations: Set<Annotation>,
       moshi: Moshi,
     ): JsonAdapter<Any>? = if (type.rawType.kotlin.isValue && !unsignedTypes.contains(type)) {
       val constructor = (type.rawType.declaredConstructors.first { it.parameterCount == 1 } as Constructor<*>)
